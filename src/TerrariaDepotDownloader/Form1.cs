@@ -5,7 +5,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Ionic.Zip;
 
@@ -13,14 +16,14 @@ namespace TerrariaDepotDownloader
 {
     public partial class Form1 : Form
     {
-        // Say Hello To Decompilers
-        private static string HelloThere = "Hello There Fellow Decompiler, This Program Was Made By D.RUSS#2430 (xXCrypticNightXx).";
+        public VersionManifests VersionManifests { get; private set; }
 
         #region Main Code
         public Form1()
         {
             InitializeComponent();
             Console.SetOut(new MultiTextWriter(new ControlWriter(richTextBox1), Console.Out));
+            this.VersionManifests = new VersionManifests();
         }
 
         // Do Loading Events
@@ -127,15 +130,15 @@ namespace TerrariaDepotDownloader
             textBox3.Text = Properties.Settings.Default.SteamPass;
 
             // Create Depot Folder
-            if (!Directory.Exists(Application.StartupPath + @"\TerrariaDepots"))
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "TerrariaDepots")))
             {
-                Directory.CreateDirectory(Application.StartupPath + @"\TerrariaDepots");
-                Properties.Settings.Default.DepotPath = Application.StartupPath + @"\TerrariaDepots";
+                Directory.CreateDirectory(Path.Combine(Application.StartupPath, "TerrariaDepots"));
+                Properties.Settings.Default.DepotPath = Path.Combine(Application.StartupPath, "TerrariaDepots");
             }
-            textBox1.Text = Application.StartupPath + @"\TerrariaDepots";
+            textBox1.Text = Path.Combine(Application.StartupPath, "TerrariaDepots");
 
             // Populate Depot Setting Path
-            if (Directory.Exists(Application.StartupPath + @"\TerrariaDepots") && Properties.Settings.Default.DepotPath == "")
+            if (Directory.Exists(Path.Combine(Application.StartupPath, "TerrariaDepots")) && Properties.Settings.Default.DepotPath == "")
             {
                 // Check If Overwrite Steam Directory Is Enabled
                 if (checkBox2.Checked)
@@ -146,7 +149,7 @@ namespace TerrariaDepotDownloader
                 else
                 {
                     // Overwrite Steam Directory Disabled
-                    Properties.Settings.Default.DepotPath = Application.StartupPath + @"\TerrariaDepots";
+                    Properties.Settings.Default.DepotPath = Path.Combine(Application.StartupPath, "TerrariaDepots");
                 }
             }
 
@@ -195,181 +198,133 @@ namespace TerrariaDepotDownloader
             // Update Buttons
             button6.Enabled = Properties.Settings.Default.PathChangeEnabled;
 
-            // Create Database File
-            if (!File.Exists(Application.StartupPath + @"\ManifestVersions.cfg"))
-            {
-                File.WriteAllText(Application.StartupPath + @"\ManifestVersions.cfg", "");
-                using (StreamWriter streamWriter = new StreamWriter(Application.StartupPath + @"\ManifestVersions.cfg"))
-                {
-                    streamWriter.WriteLine("Version, Manifest-ID");
-                }
-            }
+            RefreshManifestList();
 
-            // Make Sure Database Is Populated
-            if (File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First() != null && File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First() != "" && File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First() != "Version, Manifest-ID" && File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First().Contains(","))
+            if(Properties.Settings.Default.SkipUpdate)
             {
-                // Get Database To List
-                List<string> manifests = new List<string>() { };
-                foreach (string line in File.ReadAllLines(Application.StartupPath + @"\ManifestVersions.cfg"))
+                if (checkBox1.Checked)
+                    Console.WriteLine("DepotDownloader API new vesion check was skipped!");
+                return;
+            }
+            await this.CheckDepotDownloaderApi();
+            //try
+            //{
+            //    await this.CheckDepotDownloaderApi();
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Error Checking Version
+            //    Console.WriteLine("ERROR: Unable to check DepotDownloader API's Github version!");
+            //    Console.WriteLine(ex.Message);
+            //    return;
+            //}
+        }
+
+        private async Task CheckDepotDownloaderApi()
+        {                
+            // Check Github For DepotDownloader Update
+            Octokit.GitHubClient client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("DepotDownloader"));
+            var releases = await client.Repository.Release.GetAll("SteamRE", "DepotDownloader");
+            var latestGithubRelease = releases[0].TagName;
+
+            // Get Current DepotDownload.dll Version
+            var currentVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Application.StartupPath, "DepotDownloader.dll"));
+            // Console.WriteLine(latestGithubRelease.ToString() + " | " + "DepotDownloader_" + currentVersionInfo.ProductVersion.ToString());
+
+            // Do Version Check
+            if (latestGithubRelease.ToString() != "DepotDownloader_" + currentVersionInfo.ProductVersion.ToString())
+            {
+                // New Version Found
+                // Log Item
+                if (checkBox1.Checked)
                 {
+                    Console.WriteLine("New DepotDownloader API is available.");
+                }
+
+                // Ask For Install
+                if (MessageBox.Show("You have an outdated version of the DepotDownloader API" + "\n" + "Do you wish to download and install the update?", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(Application.ExecutablePath)).FileVersion, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    // Install Update
                     try
                     {
-                        // Check If String Contains "null"
-                        if (line.Substring(line.LastIndexOf(' ') + 1) == "null")
+                        await this.InstallDepotDownloaderApi(client, releases);
+
+                        // Log Item
+                        if (checkBox1.Checked)
                         {
-                            // String Contains "null", Add Context
-                            listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), "(no manifests database exists)", "N/A" }));
-                        }
-                        else
-                        {
-                            // Check If Game Version Folder Exists
-                            if (Directory.Exists(Properties.Settings.Default.DepotPath + @"\Terraria-v" + String.Concat(line.TakeWhile(c => c != ','))))
-                            {
-                                // String Does Not Contain "null", Record Like Normal
-                                listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), line.Substring(line.LastIndexOf(' ') + 1), "Yes" }));
-                            }
-                            else
-                            {
-                                // String Does Not Contain "null", Record Like Normal
-                                listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), line.Substring(line.LastIndexOf(' ') + 1), "No" }));
-                            }
+                            Console.WriteLine("DepotDownloader API has been download and installed successfully.");
                         }
                     }
                     catch (Exception)
                     {
-                        // Error, No Updated Manifests
-                        MessageBox.Show("ERROR: The manifest file contains an error!", "ERROR: TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                        // Close Application
-                        Application.Exit();
-                    }
-                }
-            }
-            else
-            {
-                // Error, No Updated Manifests
-                MessageBox.Show("ERROR: Please update the manifest file!", "ERROR: TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                // Close Application
-                Application.Exit();
-            }
-
-            // Reload List
-            ReloadList();
-
-            // Check For Updates
-            if (!Properties.Settings.Default.SkipUpdate)
-            {
-                try
-                {
-                    // Check Github For DepotDownloader Update
-                    Octokit.GitHubClient client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("DepotDownloader"));
-                    var releases = await client.Repository.Release.GetAll("SteamRE", "DepotDownloader");
-                    var latestGithubRelease = releases[0].TagName;
-
-                    // Get Current DepotDownload.dll Version
-                    var currentVersionInfo = FileVersionInfo.GetVersionInfo(Application.StartupPath + @"\DepotDownloader.dll");
-                    // Console.WriteLine(latestGithubRelease.ToString() + " | " + "DepotDownloader_" + currentVersionInfo.ProductVersion.ToString());
-
-                    // Do Version Check
-                    if (latestGithubRelease.ToString() != "DepotDownloader_" + currentVersionInfo.ProductVersion.ToString())
-                    {
-                        // New Version Found
-                        // Log Item
-                        if (checkBox1.Checked)
-                        {
-                            Console.WriteLine("New DepotDownloader API is available.");
-                        }
-
-                        // Ask For Install
-                        if (MessageBox.Show("You have an outdated version of the DepotDownloader API" + "\n" + "Do you wish to download and install the update?", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                        {
-                            // Install Update
-                            try
-                            {
-                                // Download From Github
-                                var latestAsset = await client.Repository.Release.GetAllAssets("SteamRE", "DepotDownloader", releases[0].Id);
-                                WebClient webClient = new WebClient();
-                                webClient.Headers.Add("user-agent", "Anything");
-                                await webClient.DownloadFileTaskAsync(new Uri(latestAsset[0].BrowserDownloadUrl), Application.StartupPath + @"\Update.zip");
-
-                                // Extract ZIP Into Dir
-                                using (ZipFile archive = new ZipFile(@"" + Application.StartupPath + @"\Update.zip"))
-                                {
-                                    archive.ExtractAll(@"" + Application.StartupPath, ExtractExistingFileAction.OverwriteSilently);
-                                }
-
-                                // Clean Up Files
-                                File.Delete(Application.StartupPath + @"\Update.zip");
-                                File.Delete(Application.StartupPath + @"\DepotDownloader.exe");
-                                File.Delete(Application.StartupPath + @"\DepotDownloader.pdb");
-                                File.Delete(Application.StartupPath + @"\README.md");
-                                File.Delete(Application.StartupPath + @"\LICENSE");
-
-                                // Task Finished
-                                MessageBox.Show("DepotDownloader API has been download and installed successfully.", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
-                                // Log Item
-                                if (checkBox1.Checked)
-                                {
-                                    Console.WriteLine("DepotDownloader API has been download and installed successfully.");
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                Console.WriteLine("ERROR: DepotDownloader API download failed!");
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            // Update Was Declined
-                            Console.WriteLine("WARN: DepotDownloader API update was declined.");
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        // No Update Needed
-                        if (checkBox1.Checked)
-                        {
-                            Console.WriteLine("DepotDownloader API is up to date.");
-                        }
+                        Console.WriteLine("ERROR: DepotDownloader API download failed!");
                         return;
                     }
                 }
-                catch (Exception)
+                else
                 {
-                    // Error Checking Version
-                    Console.WriteLine("ERROR: Unable to check DepotDownloader API's Github version!");
+                    // Update Was Declined
+                    Console.WriteLine("WARN: DepotDownloader API update was declined.");
                     return;
                 }
             }
             else
             {
-                // Log Event
+                // No Update Needed
                 if (checkBox1.Checked)
                 {
-                    Console.WriteLine("DepotDownloader API new vesion check was skipped!");
+                    Console.WriteLine("DepotDownloader API is up to date.");
                 }
+                return;
             }
+        }
+
+        private async Task InstallDepotDownloaderApi(Octokit.GitHubClient client, IEnumerable<Octokit.Release> releases)
+        {
+            // Download From Github
+            var firstReleaseId = releases.FirstOrDefault()?.Id;
+            if (!firstReleaseId.HasValue)
+                throw new ArgumentNullException($"No DepotDownloaderApi releases found.");
+            var latestAsset = await client.Repository.Release.GetAllAssets("SteamRE", "DepotDownloader", firstReleaseId.Value);
+            var uri = new Uri(latestAsset[0].BrowserDownloadUrl);
+            var targetPath = Path.Combine(Application.StartupPath, @"Update.zip");
+
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("user-agent", "Anything");
+            var response = await httpClient.GetAsync(uri);
+            using (var fs = new FileStream(targetPath, FileMode.OpenOrCreate))
+            {
+                await response.Content.CopyToAsync(fs);
+            }
+
+            // Extract ZIP Into Dir
+            using var archive = new ZipFile(Path.Combine(Application.StartupPath, "Update.zip"));
+            archive.ExtractAll(Application.StartupPath, ExtractExistingFileAction.OverwriteSilently);
+
+            // Clean Up Files
+            File.Delete(Path.Combine(Application.StartupPath, "Update.zip"));
+            File.Delete(Path.Combine(Application.StartupPath, "DepotDownloader.exe"));
+            File.Delete(Path.Combine(Application.StartupPath, "DepotDownloader.pdb"));
+            File.Delete(Path.Combine(Application.StartupPath, "README.md"));
+            File.Delete(Path.Combine(Application.StartupPath, "LICENSE"));
+
+            // Task Finished
+            MessageBox.Show("DepotDownloader API has been download and installed successfully.", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
         // Reload List
         private void button3_Click(object sender, EventArgs e)
         {
-            ReloadList();
+            RefreshManifestList();
             if (checkBox1.Checked)
             {
                 Console.WriteLine("App list reloaded");
             }
         }
 
-        public void ReloadList()
+        public void RefreshManifestList()
         {
-            // Clear ListView
-            listView1.Items.Clear();
-            listView1.Refresh();
+            versionList.Items.Clear();
 
             // Check If Directory Contains A ChangeLog If Overwrite Steam Directory Is Enabled
             if (checkBox2.Checked)
@@ -382,100 +337,76 @@ namespace TerrariaDepotDownloader
                 }
             }
 
-            // Create Database File
-            if (!File.Exists(Application.StartupPath + @"\ManifestVersions.cfg"))
-            {
-                File.WriteAllText(Application.StartupPath + @"\ManifestVersions.cfg", "");
-                using (StreamWriter streamWriter = new StreamWriter(Application.StartupPath + @"\ManifestVersions.cfg"))
-                {
-                    streamWriter.WriteLine("Version, Manifest-ID");
-                }
-            }
-
             // Reset Controls
             button2.Text = "Download";
             button5.Enabled = false;
 
-            // Make Sure Database Is Populated
-            if (File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First() != null && File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First() != "" && File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First() != "Version, Manifest-ID" && File.ReadLines(Application.StartupPath + @"\ManifestVersions.cfg").First().Contains(","))
+            if (!this.VersionManifests.IsValid)
             {
-                // Get Database To List
-                List<string> manifests = new List<string>() { };
-                foreach (string line in File.ReadAllLines(Application.StartupPath + @"\ManifestVersions.cfg"))
+                MessageBox.Show("ERROR: Please update the manifest file!", "ERROR: TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Application.Exit();
+            }
+
+            void addItem(ExtendedVersion version, string manifestId, bool exists)
+            {
+                string text = exists ? "Yes" : "No";
+                var liData = new string[] { version.ToString(), manifestId, text };
+                versionList.Items.Add(new ListViewItem(liData));
+            }
+
+            foreach (var versionManifest in this.VersionManifests)
+            {
+                var version = versionManifest.Key;
+                var manifestId = versionManifest.Value;
+                if (versionManifest.Key == new ExtendedVersion())
+                    continue;
+                if (string.IsNullOrWhiteSpace(versionManifest.Value))
                 {
-                    try
+                    addItem(version, "(no manifest found)", false);
+                    continue;
+                }
+                // Check If Overwrite Steam Directory Is Enabled
+                if (checkBox2.Checked)
+                {
+                    var firstChangelogLine = File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First();
+                    var secondChangelogWord = firstChangelogLine.Split(" ").Skip(1).FirstOrDefault();
+                    var depotGameVersion = new ExtendedVersion(secondChangelogWord);
+                    if (depotGameVersion == version)
+                        addItem(version, manifestId, true);
+                    else
+                        addItem(version, manifestId, false);
+                }
+                else
+                {
+                    // Check If Game Version Folder Exists
+                    var versionPath = Path.Combine(Properties.Settings.Default.DepotPath, $"Terraria-v{version}");
+                    if (Directory.Exists(versionPath))
                     {
-                        // Check If String Contains "null"
-                        if (line.Substring(line.LastIndexOf(' ') + 1) == "null")
+                        // Check If Folder Is Not Empty - Update Feature
+                        if (Directory.EnumerateFileSystemEntries(versionPath).Any())
                         {
-                            // String Contains "null", Add Context
-                            listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), "(no manifests database exists)", "N/A" }));
+                            // String Does Not Contain "null", Record Like Normal
+                            addItem(version, manifestId, true);
                         }
                         else
                         {
-                            // Check If Overwrite Steam Directory Is Enabled
-                            if (checkBox2.Checked)
-                            {
-                                // Check Game Version Via ChangeLog
-                                // Added Check For 1.3 == 1.3.0.1 & 1.4 == 1.4.0.1 - Update 1.8.4 // if changelog.txt reads 1.3 & array version reads 1.3.0.1
-                                if (File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First().Split(' ')[1].ToString() == String.Concat(line.TakeWhile(c => c != ',')) || File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First().Split(' ')[1].ToString() == "1.3" && String.Concat(line.TakeWhile(c => c != ',')) == "1.3.0.1" || File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First().Split(' ')[1].ToString() == "1.4" && String.Concat(line.TakeWhile(c => c != ',')) == "1.4.0.1")
-                                {
-                                    // String Does Not Contain "null", Record Like Normal
-                                    listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), line.Substring(line.LastIndexOf(' ') + 1), "Yes" }));
-                                }
-                                else
-                                {
-                                    // String Does Not Contain "null", Record Like Normal
-                                    listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), line.Substring(line.LastIndexOf(' ') + 1), "No" }));
-                                }
-                            }
-                            else
-                            {
-                                // Check If Game Version Folder Exists
-                                if (Directory.Exists(Properties.Settings.Default.DepotPath + @"\Terraria-v" + String.Concat(line.TakeWhile(c => c != ','))))
-                                {
-                                    // Check If Folder Is Not Empty - Update Feature
-                                    if (Directory.EnumerateFileSystemEntries(Properties.Settings.Default.DepotPath + @"\Terraria-v" + String.Concat(line.TakeWhile(c => c != ','))).Any())
-                                    {
-                                        // String Does Not Contain "null", Record Like Normal
-                                        listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), line.Substring(line.LastIndexOf(' ') + 1), "Yes" }));
-                                    }
-                                    else
-                                    {
-                                        // Delete Folder
-                                        Directory.Delete(Properties.Settings.Default.DepotPath + @"\Terraria-v" + String.Concat(line.TakeWhile(c => c != ',')), true);
+                            // Delete Folder
+                            Directory.Delete(versionPath, true);
 
-                                        // Log Item
-                                        if (checkBox1.Checked)
-                                        {
-                                            Console.WriteLine("Removed empty folder: " + Properties.Settings.Default.DepotPath + @"\Terraria-v" + String.Concat(line.TakeWhile(c => c != ',')));
-                                        }
-
-                                        // String Does Not Contain "null", Record Like Normal
-                                        listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), line.Substring(line.LastIndexOf(' ') + 1), "No" }));
-                                    }
-                                }
-                                else
-                                {
-                                    // String Does Not Contain "null", Record Like Normal
-                                    listView1.Items.Add(new ListViewItem(new string[] { String.Concat(line.TakeWhile(c => c != ',')), line.Substring(line.LastIndexOf(' ') + 1), "No" }));
-                                }
+                            // Log Item
+                            if (checkBox1.Checked)
+                            {
+                                Console.WriteLine($"Removed empty folder: {versionPath}");
                             }
+                            addItem(version, manifestId, false);
                         }
                     }
-                    catch (Exception)
+                    else
                     {
-                        // Error, No Updated Manifests
-                        MessageBox.Show("ERROR: The manifest file contains an error!", "ERROR: TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return;
+                        // String Does Not Contain "null", Record Like Normal
+                        addItem(version, manifestId, false);
                     }
                 }
-            }
-            else
-            {
-                // Error, No Updated Manifests
-                MessageBox.Show("ERROR: Please update the manifest file!", "ERROR: TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
             }
         }
 
@@ -578,7 +509,7 @@ namespace TerrariaDepotDownloader
         {
             if (e.Button == MouseButtons.Right)
             {
-                var focusedItem = listView1.FocusedItem;
+                var focusedItem = versionList.FocusedItem;
                 if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
                 {
                     contextMenuStrip1.Show(Cursor.Position);
@@ -603,7 +534,7 @@ namespace TerrariaDepotDownloader
             }
 
             // Get Each Row
-            foreach (ListViewItem itemRow in this.listView1.Items)
+            foreach (ListViewItem itemRow in this.versionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -638,7 +569,7 @@ namespace TerrariaDepotDownloader
                         }
 
                         // Update Forum
-                        ReloadList();
+                        RefreshManifestList();
                     }
                 }
             }
@@ -674,7 +605,7 @@ namespace TerrariaDepotDownloader
             if (MessageBox.Show("Remove All Games?\nYes or No", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
             {
                 // Get Each Row
-                foreach (ListViewItem itemRow in this.listView1.Items)
+                foreach (ListViewItem itemRow in this.versionList.Items)
                 {
                     // Check If Already Downloaded
                     if (itemRow.SubItems[2].Text == "Yes")
@@ -690,7 +621,7 @@ namespace TerrariaDepotDownloader
                     }
                 }
                 // Update Forum
-                ReloadList();
+                RefreshManifestList();
 
                 // Log Item
                 if (checkBox1.Checked)
@@ -704,7 +635,7 @@ namespace TerrariaDepotDownloader
         private void listView1_Click(object sender, EventArgs e)
         {
             // Get Each Row
-            foreach (ListViewItem itemRow in this.listView1.Items)
+            foreach (ListViewItem itemRow in this.versionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -741,7 +672,7 @@ namespace TerrariaDepotDownloader
         private void Button2_Click(object sender, EventArgs e)
         {
             // Get Each Row
-            foreach (ListViewItem itemRow in this.listView1.Items)
+            foreach (ListViewItem itemRow in this.versionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -863,7 +794,7 @@ namespace TerrariaDepotDownloader
                                 }
 
                                 // Reload List
-                                ReloadList();
+                                RefreshManifestList();
                             }
                         }
                         else
@@ -883,7 +814,7 @@ namespace TerrariaDepotDownloader
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
             // Get Each Row
-            foreach (ListViewItem itemRow in this.listView1.Items)
+            foreach (ListViewItem itemRow in this.versionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -954,7 +885,7 @@ namespace TerrariaDepotDownloader
                             }
 
                             // Reload List
-                            ReloadList();
+                            RefreshManifestList();
                         }
                     }
                     else
@@ -980,7 +911,7 @@ namespace TerrariaDepotDownloader
             }
 
             // Get Each Row
-            foreach (ListViewItem itemRow in this.listView1.Items)
+            foreach (ListViewItem itemRow in this.versionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -1015,7 +946,7 @@ namespace TerrariaDepotDownloader
                         }
 
                         // Update Forum
-                        ReloadList();
+                        RefreshManifestList();
                     }
                 }
             }
@@ -1093,7 +1024,7 @@ namespace TerrariaDepotDownloader
                     {
                         Console.WriteLine("Overwrite steam directory mode cancled.");
                     }
-                    ReloadList();
+                    RefreshManifestList();
                 }
                 else
                 {
@@ -1119,19 +1050,19 @@ namespace TerrariaDepotDownloader
                     {
                         Console.WriteLine("Overwrite steam directory mode enabled!");
                     }
-                    ReloadList();
+                    RefreshManifestList();
                 }
             }
             if (!checkBox2.Checked && Properties.Settings.Default.OverwriteSteam == true)
             {
                 // Checkbox Unchecked, Reset Textbox To Defualt Dir
-                textBox1.Text = Application.StartupPath + @"\TerrariaDepots";
+                textBox1.Text = Path.Combine(Application.StartupPath, "TerrariaDepots");
 
                 // Enable Path Changing
                 button6.Enabled = true;
 
                 // Update Settings
-                Properties.Settings.Default.DepotPath = Application.StartupPath + @"\TerrariaDepots";
+                Properties.Settings.Default.DepotPath = Path.Combine(Application.StartupPath, "TerrariaDepots");
                 Properties.Settings.Default.OverwriteSteam = false;
                 Properties.Settings.Default.PathChangeEnabled = true;
 
@@ -1142,7 +1073,7 @@ namespace TerrariaDepotDownloader
                 {
                     Console.WriteLine("Overwrite steam directory mode disabled!");
                 }
-                ReloadList();
+                RefreshManifestList();
             }
         }
 
