@@ -488,7 +488,7 @@ namespace TerrariaDepotDownloader
         private void toolStripDropDownButton1_MouseUp(object sender, MouseEventArgs e)
         {
             // Open New Form2
-            Form2 frm2 = new Form2();
+            InfoForm frm2 = new InfoForm();
             frm2.ShowDialog();
         }
 

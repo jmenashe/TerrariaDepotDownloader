@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace TerrariaDepotDownloader
 {
-    public partial class Form2 : Form
+    public partial class InfoForm : Form
     {
-        public Form2()
+        public InfoForm()
         {
             InitializeComponent();
         }
