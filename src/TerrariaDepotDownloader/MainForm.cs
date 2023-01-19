@@ -14,12 +14,12 @@ using Ionic.Zip;
 
 namespace TerrariaDepotDownloader
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         public VersionManifests VersionManifests { get; private set; }
 
         #region Main Code
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             Console.SetOut(new MultiTextWriter(new ControlWriter(richTextBox1), Console.Out));
