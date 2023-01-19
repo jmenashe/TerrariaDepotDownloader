@@ -101,7 +101,7 @@ namespace TerrariaDepotDownloader
             this.lvVersionList.TabIndex = 2;
             this.lvVersionList.UseCompatibleStateImageBehavior = false;
             this.lvVersionList.View = System.Windows.Forms.View.Details;
-            this.lvVersionList.Click += new System.EventHandler(this.listView1_Click);
+            this.lvVersionList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lvVersionList_ItemSelectionChanged);
             this.lvVersionList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvVersionList_MouseClick);
             // 
             // columnHeader2
@@ -300,7 +300,7 @@ namespace TerrariaDepotDownloader
             // 
             this.txtBaseDepotDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBaseDepotDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.txtBaseDepotDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtBaseDepotDir.Location = new System.Drawing.Point(10, 24);
             this.txtBaseDepotDir.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtBaseDepotDir.Name = "txtBaseDepotDir";

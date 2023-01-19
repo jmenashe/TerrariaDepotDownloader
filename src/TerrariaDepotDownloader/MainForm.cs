@@ -351,7 +351,8 @@ namespace TerrariaDepotDownloader
             {
                 string text = exists ? "Yes" : "No";
                 var liData = new string[] { version.ToString(), manifestId, text };
-                lvVersionList.Items.Add(new ListViewItem(liData));
+                var item = new ListViewItem(liData);
+                lvVersionList.Items.Add(item);
             }
 
             foreach (var versionManifest in this.VersionManifests)
@@ -631,186 +632,134 @@ namespace TerrariaDepotDownloader
             }
         }
 
-        // Update Button
-        private void listView1_Click(object sender, EventArgs e)
+        private void launchVersion(ListViewItem selectedRow)
         {
-            // Get Each Row
-            foreach (ListViewItem itemRow in this.lvVersionList.Items)
+            string version = selectedRow.SubItems[0].Text;
+            string workingDir = Path.Combine(Properties.Settings.Default.DepotPath, $"Terraria-v{version}");
+            string changelogPath = Path.Combine(Properties.Settings.Default.DepotPath, "changelog.txt");
+            string exePath = Path.Combine(workingDir, "Terraria.exe");
+            try
             {
-                // Get Selected Item
-                if (itemRow.Focused)
+                if (cbxOverwriteStreamDir.Checked)
+                    Process.Start("steam://rungameid/105600");
+                else
                 {
-                    // Check If Already Downloaded
-                    if (itemRow.SubItems[2].Text == "Yes")
-                    {
-                        // Edit Launch Button
-                        btnLaunch.Enabled = true;
-                        btnLaunch.Text = "Launch";
+                    Process startPath = new Process();
+                    startPath.StartInfo.WorkingDirectory = workingDir;
+                    startPath.StartInfo.FileName = exePath;
+                    startPath.Start();
+                }
 
-                        // Edit Remove Button
-                        btnRemoveApp.Enabled = true;
-                    }
-                    else if (itemRow.SubItems[2].Text == "No")
-                    {
-                        // Edit Launch Button
-                        btnLaunch.Enabled = true;
-                        btnLaunch.Text = "Download";
-
-                        // Edit Remove Button
-                        btnRemoveApp.Enabled = false;
-                    }
-                    else if (itemRow.SubItems[2].Text == "N/A")
-                    {
-                        btnLaunch.Text = "N/A";
-                        btnLaunch.Enabled = false;
-                    }
+                // Do Logging If Enabled
+                if (cbxLogActions.Checked)
+                {
+                    Console.WriteLine($"Successfully launched Terraria v{version}");
                 }
             }
+            catch (Exception error)
+            {
+                // Log Item
+                Console.WriteLine($"Failed to launch Terraria v{version}: {error.Message}");
+            }
+            btnLaunch.Enabled = false;
         }
+        private void downloadVersion(ListViewItem selectedRow)
+        {
+            // Check If User & Pass Are Populated
+            if (txtAccountName.Text != "" && txtPassword.Text != "")
+            {
+                // Check If Already Downloaded
+                if (selectedRow.SubItems[2].Text == "No")
+                {
+                    // Disable Button
+                    btnLaunch.Enabled = false;
 
-        // Launch Button
+                    // Select Tab Control
+                    // tabControl1.SelectedIndex = 2;
+
+                    // Download Version
+                    String DLLLocation = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\DepotDownloader.dll";
+                    String DotNetLocation = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\dotnet\dotnet.exe";
+                    // Update 1.5.0, Check If Everwrite To Steam Directory Is Enabled
+                    String OutDir = Properties.Settings.Default.DepotPath + @"\Terraria-v" + selectedRow.SubItems[0].Text;
+                    if (cbxOverwriteStreamDir.Checked) // Overwrite Steam Directory
+                    {
+                        OutDir = Properties.Settings.Default.DepotPath;
+
+                        // Check If Client Is Already Running - Update 1.8.3
+                        bool isRunning = Process.GetProcessesByName("Terraria").FirstOrDefault(p => p.MainModule.FileName.StartsWith(OutDir, StringComparison.InvariantCultureIgnoreCase)) != default(Process);
+                        if (isRunning)
+                        {
+                            // Is running
+                            foreach (var process in Process.GetProcessesByName("Terraria"))
+                            {
+                                process.Kill();
+
+                                // Log Item
+                                if (cbxLogActions.Checked)
+                                {
+                                    Console.WriteLine("The Terraria process was killed to continue operations.");
+                                }
+                            }
+                        }
+
+                        // Delete Folder
+                        Directory.Delete(OutDir, true);
+                        Directory.CreateDirectory(OutDir); // Update 1.8.2 Fix
+                    }
+                    String ManifestID = selectedRow.SubItems[1].Text;
+                    String EscapedPassword = Regex.Replace(txtPassword.Text, @"[%|<>&^]", @"^$&"); // Escape Any CMD Special Characters If Any Exist // Update 1.8.5.2 Fix
+                    String Arg = "dotnet " + "\"" + DLLLocation + "\"" + " -app 105600 -depot 105601 -manifest " + ManifestID + " -username " + txtAccountName.Text + " -password " + EscapedPassword + " -dir " + "\"" + OutDir + "\"";
+
+                    // Start Download
+                    try
+                    {
+                        // Start Download Process
+                        ExecuteCmd.ExecuteCommandAsync(Arg);
+
+                        // Log Item
+                        if (cbxLogActions.Checked)
+                        {
+                            Console.WriteLine("Download prompt started for Terraria-v" + selectedRow.SubItems[0].Text);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // Process Failed, Delete Folder
+                        Directory.Delete(OutDir, true);
+                        Directory.CreateDirectory(OutDir); // Update 1.8.2 Fix
+                    }
+
+                    // Reload List
+                    RefreshManifestList();
+                }
+            }
+            else
+            {
+                // Disable Button
+                btnLaunch.Enabled = false;
+
+                // Display Error
+                Console.WriteLine("ERROR: Please enter steam username / password");
+            }
+        }
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            // Get Each Row
-            foreach (ListViewItem itemRow in this.lvVersionList.Items)
+            var selectedRow = lvVersionList.SelectedItems.Cast<ListViewItem>().SingleOrDefault();
+            if (selectedRow == null)
+                return;
+
+            // Check Options
+            if (btnLaunch.Text == "Launch")
             {
-                // Get Selected Item
-                if (itemRow.Focused)
-                {
-                    // Check Options
-                    if (btnLaunch.Text == "Launch")
-                    {
-                        // Launch App
-                        //
-                        // Check If Overwrite Steam Directory Is Enabled
-                        if (cbxOverwriteStreamDir.Checked)
-                        {
-                            try
-                            {
-                                // Start Terraria Though Steam
-                                Process.Start("steam://rungameid/105600");
-
-                                // Do logging If Enabled
-                                if (cbxLogActions.Checked)
-                                {
-                                    Console.WriteLine("Successfully launched Terraria v" + File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First().Split(' ')[1].ToString() + " Through Steam!");
-                                }
-                            }
-                            catch (Exception error)
-                            {
-                                Console.WriteLine("Failed to launch Terraria v" + File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First().Split(' ')[1].ToString() + ": " + error.Message.ToString());
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                // Start Terraria By File
-                                Process startPath = new Process();
-                                startPath.StartInfo.WorkingDirectory = Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text;
-                                startPath.StartInfo.FileName = Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text + @"\Terraria.exe";
-                                startPath.Start();
-
-                                // Do Logging If Enabled
-                                if (cbxLogActions.Checked)
-                                {
-                                    Console.WriteLine("Successfully launched Terraria v" + itemRow.SubItems[0].Text);
-                                }
-                            }
-                            catch (Exception error)
-                            {
-                                // Log Item
-                                Console.WriteLine("Failed to launch Terraria v" + itemRow.SubItems[0].Text + ": " + error.Message.ToString());
-                            }
-                        }
-                        // Disable Button
-                        btnLaunch.Enabled = false;
-                    }
-                    else if (btnLaunch.Text == "Download")
-                    {
-                        // Check If User & Pass Are Populated
-                        if (txtAccountName.Text != "" && txtPassword.Text != "")
-                        {
-                            // Check If Already Downloaded
-                            if (itemRow.SubItems[2].Text == "No")
-                            {
-                                // Disable Button
-                                btnLaunch.Enabled = false;
-
-                                // Select Tab Control
-                                // tabControl1.SelectedIndex = 2;
-
-                                // Download Version
-                                String DLLLocation = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\DepotDownloader.dll";
-                                String DotNetLocation = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\dotnet\dotnet.exe";
-                                // Update 1.5.0, Check If Everwrite To Steam Directory Is Enabled
-                                String OutDir = Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text;
-                                if (cbxOverwriteStreamDir.Checked) // Overwrite Steam Directory
-                                {
-                                    OutDir = Properties.Settings.Default.DepotPath;
-
-                                    // Check If Client Is Already Running - Update 1.8.3
-                                    bool isRunning = Process.GetProcessesByName("Terraria").FirstOrDefault(p => p.MainModule.FileName.StartsWith(OutDir, StringComparison.InvariantCultureIgnoreCase)) != default(Process);
-                                    if (isRunning)
-                                    {
-                                        // Is running
-                                        foreach (var process in Process.GetProcessesByName("Terraria"))
-                                        {
-                                            process.Kill();
-
-                                            // Log Item
-                                            if (cbxLogActions.Checked)
-                                            {
-                                                Console.WriteLine("The Terraria process was killed to continue operations.");
-                                            }
-                                        }
-                                    }
-
-                                    // Delete Folder
-                                    Directory.Delete(OutDir, true);
-                                    Directory.CreateDirectory(OutDir); // Update 1.8.2 Fix
-                                }
-                                String ManifestID = itemRow.SubItems[1].Text;
-                                String EscapedPassword = Regex.Replace(txtPassword.Text, @"[%|<>&^]", @"^$&"); // Escape Any CMD Special Characters If Any Exist // Update 1.8.5.2 Fix
-                                String Arg = "dotnet " + "\"" + DLLLocation + "\"" + " -app 105600 -depot 105601 -manifest " + ManifestID + " -username " + txtAccountName.Text + " -password " + EscapedPassword + " -dir " + "\"" + OutDir + "\"";
-
-                                // Start Download
-                                try
-                                {
-                                    // Start Download Process
-                                    ExecuteCmd.ExecuteCommandAsync(Arg);
-
-                                    // Log Item
-                                    if (cbxLogActions.Checked)
-                                    {
-                                        Console.WriteLine("Download prompt started for Terraria-v" + itemRow.SubItems[0].Text);
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    // Process Failed, Delete Folder
-                                    Directory.Delete(OutDir, true);
-                                    Directory.CreateDirectory(OutDir); // Update 1.8.2 Fix
-                                }
-
-                                // Reload List
-                                RefreshManifestList();
-                            }
-                        }
-                        else
-                        {
-                            // Disable Button
-                            btnLaunch.Enabled = false;
-
-                            // Display Error
-                            Console.WriteLine("ERROR: Please enter steam username / password");
-                        }
-                    }
-                }
+                launchVersion(selectedRow);
+            }
+            else if (btnLaunch.Text == "Download")
+            {
+                downloadVersion(selectedRow);
             }
         }
 
-        // Download App Via ToolStrip
         private void miDownloadApp_Click(object sender, EventArgs e)
         {
             // Get Each Row
@@ -900,7 +849,6 @@ namespace TerrariaDepotDownloader
             }
         }
 
-        // Remove App
         private void btnRemoveApp_Click(object sender, EventArgs e)
         {
             // Disable If Overwrite Steam Directory Enabled
@@ -955,7 +903,6 @@ namespace TerrariaDepotDownloader
             btnRemoveApp.Enabled = false;
         }
 
-        // Open Depot Folder Directory
         private void btnOpenDepots_Click(object sender, EventArgs e)
         {
             try
@@ -976,7 +923,6 @@ namespace TerrariaDepotDownloader
             }
         }
 
-        // Update Checkbox Config
         private void cbxLogActions_CheckedChanged(object sender, EventArgs e)
         {
             if (cbxLogActions.Checked)
@@ -989,7 +935,6 @@ namespace TerrariaDepotDownloader
             }
         }
 
-        // Auto Scroll To End
         private void rtbLog_TextChanged(object sender, EventArgs e)
         {
             // set the current caret position to the end
@@ -999,7 +944,6 @@ namespace TerrariaDepotDownloader
             rtbLog.ScrollToCaret();
         }
 
-        // Show Prompt Warning
         private void cbxOverwriteStreamDir_CheckedChanged(object sender, EventArgs e)
         {
             if (cbxOverwriteStreamDir.Checked && Properties.Settings.Default.OverwriteSteam == false)
@@ -1077,7 +1021,6 @@ namespace TerrariaDepotDownloader
             }
         }
 
-        // Tooltip Contols
         private void cbxShowTooltips_CheckedChanged(object sender, EventArgs e)
         {
             // Enable or Disable Tooltips
@@ -1095,7 +1038,6 @@ namespace TerrariaDepotDownloader
             }
         }
 
-        // Skip Update Controls
         private void cbxSkipUpdateCheck_CheckedChanged(object sender, EventArgs e)
         {
             // Enable or Disable Tooltips
@@ -1111,5 +1053,38 @@ namespace TerrariaDepotDownloader
             }
         }
         #endregion
+
+        private void lvVersionList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            var list = (ListView)sender;
+            var selectedRow = list.SelectedItems.Cast<ListViewItem>().SingleOrDefault();
+            if (selectedRow == null)
+                return;
+
+            // Check If Already Downloaded
+            if (selectedRow.SubItems[2].Text == "Yes")
+            {
+                // Edit Launch Button
+                btnLaunch.Enabled = true;
+                btnLaunch.Text = "Launch";
+
+                // Edit Remove Button
+                btnRemoveApp.Enabled = true;
+            }
+            else if (selectedRow.SubItems[2].Text == "No")
+            {
+                // Edit Launch Button
+                btnLaunch.Enabled = true;
+                btnLaunch.Text = "Download";
+
+                // Edit Remove Button
+                btnRemoveApp.Enabled = false;
+            }
+            else if (selectedRow.SubItems[2].Text == "N/A")
+            {
+                btnLaunch.Text = "N/A";
+                btnLaunch.Enabled = false;
+            }
+        }
     }
 }
