@@ -14,7 +14,7 @@ public static class DepotAgent
     public static async Task DownloadAppAsync(Manifest manifest, string username, string password, string outputDir)
     {
         var downloaderPath = Path.Combine(
-            Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
             "DepotDownloader.exe"
         );
         var escPassword = Regex.Replace(password, @"[%|<>&^]", @"^$&");

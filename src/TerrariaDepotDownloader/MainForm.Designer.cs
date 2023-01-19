@@ -69,6 +69,7 @@ namespace TerrariaDepotDownloader
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miDownloadApp = new System.Windows.Forms.ToolStripMenuItem();
             this.miRemoveApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnDownload = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabDownloader.SuspendLayout();
             this.tabSettings.SuspendLayout();
@@ -475,7 +476,7 @@ namespace TerrariaDepotDownloader
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnClose.Location = new System.Drawing.Point(385, 554);
+            this.btnClose.Location = new System.Drawing.Point(244, 554);
             this.btnClose.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(132, 61);
@@ -551,11 +552,26 @@ namespace TerrariaDepotDownloader
             this.miRemoveApp.Text = "Remove App";
             this.miRemoveApp.Click += new System.EventHandler(this.miRemoveApp_Click);
             // 
+            // btnDownload
+            // 
+            this.btnDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDownload.Enabled = false;
+            this.btnDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnDownload.Location = new System.Drawing.Point(384, 554);
+            this.btnDownload.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(132, 61);
+            this.btnDownload.TabIndex = 6;
+            this.btnDownload.Text = "Download";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(670, 629);
+            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.btnRemoveApp);
             this.Controls.Add(this.btnLaunch);
             this.Controls.Add(this.btnClose);
@@ -627,6 +643,7 @@ namespace TerrariaDepotDownloader
         private System.Windows.Forms.CheckBox cbxShowTooltips;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox cbxSkipUpdateCheck;
+        private System.Windows.Forms.Button btnDownload;
     }
 }
 

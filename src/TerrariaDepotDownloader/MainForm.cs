@@ -173,7 +173,8 @@ namespace TerrariaDepotDownloader
             // Add Tooltips - Update 1.8.5
             Tooltips.InitialDelay = 1000;
             Tooltips.SetToolTip(btnClose, "Close game and application");
-            Tooltips.SetToolTip(btnLaunch, "Download / Launch Terraria version");
+            Tooltips.SetToolTip(btnLaunch, "Launch Terraria version");
+            Tooltips.SetToolTip(btnDownload, "(Re)Download Terraria version");
             Tooltips.SetToolTip(btnReloadList, "Reload all installed versions");
             Tooltips.SetToolTip(btnClearLog, "Clear log of all entries");
             Tooltips.SetToolTip(btnRemoveApp, "Remove selected version");
@@ -331,7 +332,7 @@ namespace TerrariaDepotDownloader
             }
 
             // Reset Controls
-            btnLaunch.Text = "Download";
+            btnLaunch.Enabled = false;
             btnRemoveApp.Enabled = false;
 
             if (!this.VersionManifests.IsValid)
@@ -610,24 +611,14 @@ namespace TerrariaDepotDownloader
             {
                 Console.WriteLine($"Failed to launch Terraria v{manifest.Version}: {error.Message}");
             }
-            btnLaunch.Enabled = false;
         }
 
-        private async void btnLaunch_Click(object sender, EventArgs e)
+        private void btnLaunch_Click(object sender, EventArgs e)
         {
             var selectedRow = lvManifestList.SelectedItems.Cast<ListViewItem>().SingleOrDefault();
             if (selectedRow == null)
                 return;
-
-            // Check Options
-            if (btnLaunch.Text == "Launch")
-            {
-                launchVersion(selectedRow);
-            }
-            else if (btnLaunch.Text == "Download")
-            {
-                await downloadSelectedManifest();
-            }
+            launchVersion(selectedRow);
         }
 
         private void clearTerrariaDir(TerrariaManifest manifest, string OutDir)
@@ -654,7 +645,6 @@ namespace TerrariaDepotDownloader
             if (manifest.IsDownloaded)
                 return;
 
-            btnLaunch.Enabled = false;
             if (string.IsNullOrWhiteSpace(txtAccountName.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
             {
                 Console.WriteLine("ERROR: Please enter steam username / password");
@@ -885,27 +875,23 @@ namespace TerrariaDepotDownloader
 
         private void lvManifestList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            var list = (ListView)sender;
-            var selectedRow = list.SelectedItems.Cast<ListViewItem>().SingleOrDefault();
+            if(!e.IsSelected)
+            {
+                btnLaunch.Enabled = btnRemoveApp.Enabled = btnDownload.Enabled = false;
+                return;
+            }
+            this.SelectedManifestRow = e.Item;
+            var manifest = this.SelectedManifest;
+            btnLaunch.Enabled = btnRemoveApp.Enabled = manifest.IsDownloaded;
+            btnDownload.Enabled = !manifest.IsDownloaded;
+        }
+
+        private async void btnDownload_Click(object sender, EventArgs e)
+        {
+            var selectedRow = lvManifestList.SelectedItems.Cast<ListViewItem>().SingleOrDefault();
             if (selectedRow == null)
                 return;
-
-            this.SelectedManifestRow = selectedRow;
-            var manifest = this.SelectedManifest;
-
-            // Check If Already Downloaded
-            if (manifest.IsDownloaded)
-            {
-                btnLaunch.Enabled = true;
-                btnLaunch.Text = "Launch";
-                btnRemoveApp.Enabled = true;
-            }
-            else
-            {
-                btnLaunch.Enabled = true;
-                btnLaunch.Text = "Download";
-                btnRemoveApp.Enabled = false;
-            }
+            await downloadSelectedManifest();
         }
     }
 }
