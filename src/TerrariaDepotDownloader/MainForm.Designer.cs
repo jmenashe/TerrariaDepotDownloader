@@ -31,7 +31,7 @@ namespace TerrariaDepotDownloader
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.lvVersionList = new System.Windows.Forms.ListView();
+            this.lvManifestList = new System.Windows.Forms.ListView();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
@@ -81,28 +81,28 @@ namespace TerrariaDepotDownloader
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // lvVersionList
+            // lvManifestList
             // 
-            this.lvVersionList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lvManifestList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvVersionList.BackColor = System.Drawing.SystemColors.Window;
-            this.lvVersionList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lvManifestList.BackColor = System.Drawing.SystemColors.Window;
+            this.lvManifestList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2,
             this.columnHeader1,
             this.columnHeader3});
-            this.lvVersionList.FullRowSelect = true;
-            this.lvVersionList.GridLines = true;
-            this.lvVersionList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lvVersionList.Location = new System.Drawing.Point(0, 0);
-            this.lvVersionList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.lvVersionList.Name = "lvVersionList";
-            this.lvVersionList.Size = new System.Drawing.Size(629, 289);
-            this.lvVersionList.TabIndex = 2;
-            this.lvVersionList.UseCompatibleStateImageBehavior = false;
-            this.lvVersionList.View = System.Windows.Forms.View.Details;
-            this.lvVersionList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lvVersionList_ItemSelectionChanged);
-            this.lvVersionList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvVersionList_MouseClick);
+            this.lvManifestList.FullRowSelect = true;
+            this.lvManifestList.GridLines = true;
+            this.lvManifestList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvManifestList.Location = new System.Drawing.Point(0, 0);
+            this.lvManifestList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.lvManifestList.Name = "lvManifestList";
+            this.lvManifestList.Size = new System.Drawing.Size(629, 289);
+            this.lvManifestList.TabIndex = 2;
+            this.lvManifestList.UseCompatibleStateImageBehavior = false;
+            this.lvManifestList.View = System.Windows.Forms.View.Details;
+            this.lvManifestList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lvManifestList_ItemSelectionChanged);
+            this.lvManifestList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvManifestList_MouseClick);
             // 
             // columnHeader2
             // 
@@ -142,7 +142,7 @@ namespace TerrariaDepotDownloader
             this.tabDownloader.Controls.Add(this.btnOpenDepots);
             this.tabDownloader.Controls.Add(this.btnRemoveAll);
             this.tabDownloader.Controls.Add(this.btnReloadList);
-            this.tabDownloader.Controls.Add(this.lvVersionList);
+            this.tabDownloader.Controls.Add(this.lvManifestList);
             this.tabDownloader.Location = new System.Drawing.Point(4, 32);
             this.tabDownloader.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabDownloader.Name = "tabDownloader";
@@ -589,7 +589,7 @@ namespace TerrariaDepotDownloader
         }
 
         #endregion
-        private System.Windows.Forms.ListView lvVersionList;
+        private System.Windows.Forms.ListView lvManifestList;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.TabControl tabControl1;

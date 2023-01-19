@@ -11,46 +11,45 @@ using System.Diagnostics.CodeAnalysis;
 using System.Collections;
 using System.Collections.Specialized;
 
-namespace TerrariaDepotDownloader;
-public class VersionManifests : IOrderedEnumerable<KeyValuePair<ExtendedVersion, string>>
+namespace TerrariaDepotDownloader.Manifests;
+public class VersionManifests : IOrderedEnumerable<TerrariaManifest>
 {
     private static Assembly CurrentAssembly = Assembly.GetExecutingAssembly();
     private static readonly string ManifestMapFile = Path.Combine(Path.GetDirectoryName(CurrentAssembly.Location), "VersionManifests.json");
-    public IReadOnlyDictionary<ExtendedVersion, string> Map => this._Map;
-    private SortedDictionary<ExtendedVersion, string> _Map { get; set; }
-    public string this[string ExtendedVersion] => this[new ExtendedVersion(ExtendedVersion)];
-    public string this[ExtendedVersion ExtendedVersion] => this[ExtendedVersion];
+    public IReadOnlyDictionary<DynamicVersion, TerrariaManifest> Map => _Map;
+    private SortedDictionary<DynamicVersion, TerrariaManifest> _Map { get; set; }
+    public TerrariaManifest this[string ExtendedVersion] => this[new DynamicVersion(ExtendedVersion)];
+    public TerrariaManifest this[DynamicVersion ExtendedVersion] => this[ExtendedVersion];
     public bool IsValid { get; private set; }
 
-    public IEnumerable<ExtendedVersion> Keys => this.Map.Keys;
+    public IEnumerable<DynamicVersion> Keys => Map.Keys;
 
-    public IEnumerable<string> Values => this.Map.Values;
+    public IEnumerable<TerrariaManifest> Values => Map.Values;
 
-    public int Count => this.Map.Count;
+    public int Count => Map.Count;
 
     public VersionManifests()
     {
-        this._Map = this.ReadManifestMap();
-        this.IsValid = this.Validate();
+        _Map = ReadManifestMap();
+        IsValid = Validate();
     }
 
     private bool Validate()
     {
-        if (this.Map == null) return false;
-        if (this.Map.Count == 0) return false;
+        if (Map == null) return false;
+        if (Map.Count == 0) return false;
         return true;
     }
 
-    private SortedDictionary<ExtendedVersion, string> ReadManifestMap()
+    private SortedDictionary<DynamicVersion, TerrariaManifest> ReadManifestMap()
     {
         IDictionary<string, string> data;
-        if (this.TryReadManifestMapFile(out var map))
+        if (TryReadManifestMapFile(out var map))
             data = map;
         else
-            data = this.ReadEmbeddedManifestMap();
-        var sorted = new SortedDictionary<ExtendedVersion, string>();
-        foreach (var key in data.Keys)
-            sorted.Add(new ExtendedVersion(key), data[key]);
+            data = ReadEmbeddedManifestMap();
+        var converted = data.Select(x => new TerrariaManifest(new DynamicVersion(x.Key), ulong.Parse(x.Value)));
+        var sorted = converted.ToSortedDictionary(m => m.Version, DynamicVersion.DefaultComparer);
         return sorted;
     }
     private bool TryReadManifestMapFile(out Dictionary<string, string> map)
@@ -76,13 +75,13 @@ public class VersionManifests : IOrderedEnumerable<KeyValuePair<ExtendedVersion,
         return deserialized;
     }
 
-    public IOrderedEnumerable<KeyValuePair<ExtendedVersion, string>> CreateOrderedEnumerable<TKey>(Func<KeyValuePair<ExtendedVersion, string>, TKey> keySelector, IComparer<TKey> comparer, bool descending)
+    public IOrderedEnumerable<TerrariaManifest> CreateOrderedEnumerable<TKey>(Func<TerrariaManifest, TKey> keySelector, IComparer<TKey> comparer, bool descending)
     {
-        if(descending)
-            return this.Map.OrderByDescending(keySelector, comparer);
+        if (descending)
+            return Map.Values.OrderByDescending(keySelector, comparer);
         else
-            return this.Map.OrderBy(keySelector, comparer);
+            return Map.Values.OrderBy(keySelector, comparer);
     }
-    public IEnumerator<KeyValuePair<ExtendedVersion, string>> GetEnumerator() => this.Map.GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+    public IEnumerator<TerrariaManifest> GetEnumerator() => Map.Values.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

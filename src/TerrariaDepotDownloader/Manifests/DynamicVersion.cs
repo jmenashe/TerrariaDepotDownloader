@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerrariaDepotDownloader.Manifests;
 
 namespace TerrariaDepotDownloader;
-public class ExtendedVersion : IComparable<ExtendedVersion>
+public class DynamicVersion : IComparable<DynamicVersion>
 {
+    public class DynamicVersionComparer : IComparer<DynamicVersion>
+    {
+        public int Compare(DynamicVersion x, DynamicVersion y) => x.CompareTo(y);
+    }
+    public static readonly IComparer<DynamicVersion> DefaultComparer = new DynamicVersionComparer();
+    public static readonly DynamicVersion Empty = new DynamicVersion();
     public const int DefaultVersionLength = 5;
     private List<int> VersionParts = new List<int>();
     public int Length => this.VersionParts.Count;
 
-    public ExtendedVersion() : this(v: null, DefaultVersionLength) { }
-    public ExtendedVersion(string v) : this(v, DefaultVersionLength) { }
-    public ExtendedVersion(string v, int length)
+    public DynamicVersion() : this(v: null, DefaultVersionLength) { }
+    public DynamicVersion(string v) : this(v, DefaultVersionLength) { }
+    public DynamicVersion(string v, int length)
     {
         if(v == null)
             v = string.Empty;
@@ -33,7 +40,7 @@ public class ExtendedVersion : IComparable<ExtendedVersion>
         }
     }
 
-    public int CompareTo(ExtendedVersion other)
+    public int CompareTo(DynamicVersion other)
     {
         for(int i = 0; i < this.VersionParts.Count; i++)
         {
@@ -53,6 +60,8 @@ public class ExtendedVersion : IComparable<ExtendedVersion>
         }
         return 0;
     }
+
+    public bool IsEmpty() => this.CompareTo(Empty) == 0;
 
     public override string ToString() => string.Join(".", this.VersionParts);
 }

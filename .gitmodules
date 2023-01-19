@@ -1,0 +1,3 @@
+[submodule "submodules/DepotDownloader"]
+	path = submodules/DepotDownloader
+	url = git@github.com:SteamRE/DepotDownloader.git

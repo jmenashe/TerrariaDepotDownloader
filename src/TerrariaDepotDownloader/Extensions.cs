@@ -15,4 +15,15 @@ internal static class Extensions
                 return true;
         return false;
     }
+
+    public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey,TValue>(this IEnumerable<TValue> items, Func<TValue, TKey> keySelector, IComparer<TKey> comparer)
+    {
+        var sorted = new SortedDictionary<TKey, TValue>(comparer);
+        foreach(var item in items)
+        {
+            var key = keySelector(item);
+            sorted.Add(key, item);
+        }
+        return sorted;
+    }
 }
