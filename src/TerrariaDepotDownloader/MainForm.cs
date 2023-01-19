@@ -22,13 +22,13 @@ namespace TerrariaDepotDownloader
         public MainForm()
         {
             InitializeComponent();
-            Console.SetOut(new MultiTextWriter(new ControlWriter(richTextBox1), Console.Out));
+            Console.SetOut(new MultiTextWriter(new ControlWriter(rtbLog), Console.Out));
             this.VersionManifests = new VersionManifests();
         }
 
         // Do Loading Events
         public ToolTip Tooltips = new ToolTip();
-        private async void Form1_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
             // Varify .NET 6.0 Or Later Exists - Update 1.8.3
             var dotnet86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\dotnet\host\fxr";
@@ -126,8 +126,8 @@ namespace TerrariaDepotDownloader
             }
 
             // Load Steam Textbox Data
-            textBox2.Text = Properties.Settings.Default.SteamUser;
-            textBox3.Text = Properties.Settings.Default.SteamPass;
+            txtAccountName.Text = Properties.Settings.Default.SteamUser;
+            txtPassword.Text = Properties.Settings.Default.SteamPass;
 
             // Create Depot Folder
             if (!Directory.Exists(Path.Combine(Application.StartupPath, "TerrariaDepots")))
@@ -135,13 +135,13 @@ namespace TerrariaDepotDownloader
                 Directory.CreateDirectory(Path.Combine(Application.StartupPath, "TerrariaDepots"));
                 Properties.Settings.Default.DepotPath = Path.Combine(Application.StartupPath, "TerrariaDepots");
             }
-            textBox1.Text = Path.Combine(Application.StartupPath, "TerrariaDepots");
+            txtBaseDepotDir.Text = Path.Combine(Application.StartupPath, "TerrariaDepots");
 
             // Populate Depot Setting Path
             if (Directory.Exists(Path.Combine(Application.StartupPath, "TerrariaDepots")) && Properties.Settings.Default.DepotPath == "")
             {
                 // Check If Overwrite Steam Directory Is Enabled
-                if (checkBox2.Checked)
+                if (cbxOverwriteStreamDir.Checked)
                 {
                     // Overwrite Steam Directory Enabled
                     Properties.Settings.Default.DepotPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Steam\steamapps\common\Terraria";
@@ -154,37 +154,37 @@ namespace TerrariaDepotDownloader
             }
 
             // Update Depot Path & Create Folder
-            textBox1.Text = Properties.Settings.Default.DepotPath;
+            txtBaseDepotDir.Text = Properties.Settings.Default.DepotPath;
             if (!Directory.Exists(Properties.Settings.Default.DepotPath))
             {
                 Directory.CreateDirectory(Properties.Settings.Default.DepotPath);
             }
 
             // Update Checkboxes
-            checkBox1.Checked = Properties.Settings.Default.LogActions;
-            checkBox2.Checked = Properties.Settings.Default.OverwriteSteam;
-            checkBox3.Checked = Properties.Settings.Default.ToolTips;
-            checkBox4.Checked = Properties.Settings.Default.SkipUpdate;
+            cbxLogActions.Checked = Properties.Settings.Default.LogActions;
+            cbxOverwriteStreamDir.Checked = Properties.Settings.Default.OverwriteSteam;
+            cbxShowTooltips.Checked = Properties.Settings.Default.ToolTips;
+            cbxSkipUpdateCheck.Checked = Properties.Settings.Default.SkipUpdate;
 
             // Add Tooltips - Update 1.8.5
             Tooltips.InitialDelay = 1000;
-            Tooltips.SetToolTip(button1, "Close game and application");
-            Tooltips.SetToolTip(button2, "Download / Launch Terraria version");
-            Tooltips.SetToolTip(button3, "Reload all installed versions");
-            Tooltips.SetToolTip(button4, "Clear log of all entries");
-            Tooltips.SetToolTip(button5, "Remove selected version");
-            Tooltips.SetToolTip(button6, "Browse for a new install directory");
-            Tooltips.SetToolTip(button7, "Temporarily show your password");
-            Tooltips.SetToolTip(button8, "Remove all games from the list");
-            Tooltips.SetToolTip(button9, "Open current base directory");
+            Tooltips.SetToolTip(btnClose, "Close game and application");
+            Tooltips.SetToolTip(btnLaunch, "Download / Launch Terraria version");
+            Tooltips.SetToolTip(btnReloadList, "Reload all installed versions");
+            Tooltips.SetToolTip(btnClearLog, "Clear log of all entries");
+            Tooltips.SetToolTip(btnRemoveApp, "Remove selected version");
+            Tooltips.SetToolTip(btnBrowse, "Browse for a new install directory");
+            Tooltips.SetToolTip(btnShow, "Temporarily show your password");
+            Tooltips.SetToolTip(btnRemoveAll, "Remove all games from the list");
+            Tooltips.SetToolTip(btnOpenDepots, "Open current base directory");
 
-            Tooltips.SetToolTip(checkBox1, "Log all actions to the output log");
-            Tooltips.SetToolTip(checkBox2, "All installs overwrites Steam directory");
-            Tooltips.SetToolTip(checkBox3, "Show or hide tooltips");
-            Tooltips.SetToolTip(checkBox4, "Skip API update check");
+            Tooltips.SetToolTip(cbxLogActions, "Log all actions to the output log");
+            Tooltips.SetToolTip(cbxOverwriteStreamDir, "All installs overwrites Steam directory");
+            Tooltips.SetToolTip(cbxShowTooltips, "Show or hide tooltips");
+            Tooltips.SetToolTip(cbxSkipUpdateCheck, "Skip API update check");
 
             // Enable or Disable Tooltips
-            if (checkBox3.Checked)
+            if (cbxShowTooltips.Checked)
             {
                 // Enable Tooltips
                 Tooltips.Active = true;
@@ -196,13 +196,13 @@ namespace TerrariaDepotDownloader
             }
 
             // Update Buttons
-            button6.Enabled = Properties.Settings.Default.PathChangeEnabled;
+            btnBrowse.Enabled = Properties.Settings.Default.PathChangeEnabled;
 
             RefreshManifestList();
 
             if(Properties.Settings.Default.SkipUpdate)
             {
-                if (checkBox1.Checked)
+                if (cbxLogActions.Checked)
                     Console.WriteLine("DepotDownloader API new vesion check was skipped!");
                 return;
             }
@@ -236,7 +236,7 @@ namespace TerrariaDepotDownloader
             {
                 // New Version Found
                 // Log Item
-                if (checkBox1.Checked)
+                if (cbxLogActions.Checked)
                 {
                     Console.WriteLine("New DepotDownloader API is available.");
                 }
@@ -250,7 +250,7 @@ namespace TerrariaDepotDownloader
                         await this.InstallDepotDownloaderApi(client, releases);
 
                         // Log Item
-                        if (checkBox1.Checked)
+                        if (cbxLogActions.Checked)
                         {
                             Console.WriteLine("DepotDownloader API has been download and installed successfully.");
                         }
@@ -271,7 +271,7 @@ namespace TerrariaDepotDownloader
             else
             {
                 // No Update Needed
-                if (checkBox1.Checked)
+                if (cbxLogActions.Checked)
                 {
                     Console.WriteLine("DepotDownloader API is up to date.");
                 }
@@ -313,10 +313,10 @@ namespace TerrariaDepotDownloader
         }
 
         // Reload List
-        private void button3_Click(object sender, EventArgs e)
+        private void btnReloadList_Click(object sender, EventArgs e)
         {
             RefreshManifestList();
-            if (checkBox1.Checked)
+            if (cbxLogActions.Checked)
             {
                 Console.WriteLine("App list reloaded");
             }
@@ -324,10 +324,10 @@ namespace TerrariaDepotDownloader
 
         public void RefreshManifestList()
         {
-            versionList.Items.Clear();
+            lvVersionList.Items.Clear();
 
             // Check If Directory Contains A ChangeLog If Overwrite Steam Directory Is Enabled
-            if (checkBox2.Checked)
+            if (cbxOverwriteStreamDir.Checked)
             {
                 // Check If Directory Contains A ChangeLog
                 if (!File.Exists(Properties.Settings.Default.DepotPath + @"\changelog.txt"))
@@ -338,8 +338,8 @@ namespace TerrariaDepotDownloader
             }
 
             // Reset Controls
-            button2.Text = "Download";
-            button5.Enabled = false;
+            btnLaunch.Text = "Download";
+            btnRemoveApp.Enabled = false;
 
             if (!this.VersionManifests.IsValid)
             {
@@ -351,7 +351,7 @@ namespace TerrariaDepotDownloader
             {
                 string text = exists ? "Yes" : "No";
                 var liData = new string[] { version.ToString(), manifestId, text };
-                versionList.Items.Add(new ListViewItem(liData));
+                lvVersionList.Items.Add(new ListViewItem(liData));
             }
 
             foreach (var versionManifest in this.VersionManifests)
@@ -366,7 +366,7 @@ namespace TerrariaDepotDownloader
                     continue;
                 }
                 // Check If Overwrite Steam Directory Is Enabled
-                if (checkBox2.Checked)
+                if (cbxOverwriteStreamDir.Checked)
                 {
                     var firstChangelogLine = File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First();
                     var secondChangelogWord = firstChangelogLine.Split(" ").Skip(1).FirstOrDefault();
@@ -394,7 +394,7 @@ namespace TerrariaDepotDownloader
                             Directory.Delete(versionPath, true);
 
                             // Log Item
-                            if (checkBox1.Checked)
+                            if (cbxLogActions.Checked)
                             {
                                 Console.WriteLine($"Removed empty folder: {versionPath}");
                             }
@@ -411,7 +411,7 @@ namespace TerrariaDepotDownloader
         }
 
         // Open Browse Dialogue
-        private void button6_Click(object sender, EventArgs e)
+        private void btnBrowse_Click(object sender, EventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
             {
@@ -419,14 +419,14 @@ namespace TerrariaDepotDownloader
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    textBox1.Text = fbd.SelectedPath;
+                    txtBaseDepotDir.Text = fbd.SelectedPath;
                     Properties.Settings.Default.DepotPath = fbd.SelectedPath;
                 }
             }
         }
 
         // Close Games & Application
-        private void button1_Click(object sender, EventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
             // Check For Any Open Clients
             if (Process.GetProcessesByName("Terraria").Length > 0)
@@ -439,8 +439,8 @@ namespace TerrariaDepotDownloader
             }
 
             // Gather Steam Data
-            Properties.Settings.Default.SteamUser = textBox2.Text;
-            Properties.Settings.Default.SteamPass = textBox3.Text;
+            Properties.Settings.Default.SteamUser = txtAccountName.Text;
+            Properties.Settings.Default.SteamPass = txtPassword.Text;
 
             // Save Settings
             Properties.Settings.Default.Save();
@@ -450,11 +450,11 @@ namespace TerrariaDepotDownloader
         }
 
         // Form Closing
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Gather Steam Data
-            Properties.Settings.Default.SteamUser = textBox2.Text;
-            Properties.Settings.Default.SteamPass = textBox3.Text;
+            Properties.Settings.Default.SteamUser = txtAccountName.Text;
+            Properties.Settings.Default.SteamPass = txtPassword.Text;
 
             // Save Settings
             Properties.Settings.Default.Save();
@@ -464,18 +464,18 @@ namespace TerrariaDepotDownloader
         }
 
         // Clear Log
-        private void button4_Click(object sender, EventArgs e)
+        private void btnClearLog_Click(object sender, EventArgs e)
         {
-            richTextBox1.Clear();
-            richTextBox1.Update();
+            rtbLog.Clear();
+            rtbLog.Update();
         }
 
         // Close Via ToolStrip
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void miClose_Click(object sender, EventArgs e)
         {
             // Gather Steam Data
-            Properties.Settings.Default.SteamUser = textBox2.Text;
-            Properties.Settings.Default.SteamPass = textBox3.Text;
+            Properties.Settings.Default.SteamUser = txtAccountName.Text;
+            Properties.Settings.Default.SteamPass = txtPassword.Text;
 
             // Save Settings
             Properties.Settings.Default.Save();
@@ -485,7 +485,7 @@ namespace TerrariaDepotDownloader
         }
 
         // Open Info Tab
-        private void toolStripDropDownButton1_MouseUp(object sender, MouseEventArgs e)
+        private void miInfo_MouseUp(object sender, MouseEventArgs e)
         {
             // Open New Form2
             InfoForm frm2 = new InfoForm();
@@ -493,23 +493,23 @@ namespace TerrariaDepotDownloader
         }
 
         // Show Password
-        private void button7_MouseDown(object sender, MouseEventArgs e)
+        private void btnShow_MouseDown(object sender, MouseEventArgs e)
         {
-            textBox3.PasswordChar = '\u0000';
+            txtPassword.PasswordChar = '\u0000';
         }
 
         // Hide Password
-        private void button7_MouseUp(object sender, MouseEventArgs e)
+        private void btnShow_MouseUp(object sender, MouseEventArgs e)
         {
-            textBox3.PasswordChar = '*';
+            txtPassword.PasswordChar = '*';
         }
 
         // Open Context Menu
-        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        private void lvVersionList_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                var focusedItem = versionList.FocusedItem;
+                var focusedItem = lvVersionList.FocusedItem;
                 if (focusedItem != null && focusedItem.Bounds.Contains(e.Location))
                 {
                     contextMenuStrip1.Show(Cursor.Position);
@@ -518,23 +518,23 @@ namespace TerrariaDepotDownloader
         }
 
         // Remove App Tool Via ToolStrip
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        private void miRemoveApp_Click(object sender, EventArgs e)
         {
             // Check If Removal Is Avalible
-            if (!button5.Enabled)
+            if (!btnRemoveApp.Enabled)
             {
                 return;
             }
 
             // Disable If Overwrite Steam Directory Enabled
-            if (checkBox2.Checked)
+            if (cbxOverwriteStreamDir.Checked)
             {
                 MessageBox.Show("You cannot use this feature while \"Overwrite Steam Directory\" feature is enabled.", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
 
             // Get Each Row
-            foreach (ListViewItem itemRow in this.versionList.Items)
+            foreach (ListViewItem itemRow in this.lvVersionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -552,7 +552,7 @@ namespace TerrariaDepotDownloader
                                 process.Kill();
 
                                 // Log Item
-                                if (checkBox1.Checked)
+                                if (cbxLogActions.Checked)
                                 {
                                     Console.WriteLine("The Terraria process was killed to continue operations.");
                                 }
@@ -563,7 +563,7 @@ namespace TerrariaDepotDownloader
                         Directory.Delete(Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text, true);
 
                         // Log Item
-                        if (checkBox1.Checked)
+                        if (cbxLogActions.Checked)
                         {
                             Console.WriteLine("Removed: " + Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text);
                         }
@@ -576,7 +576,7 @@ namespace TerrariaDepotDownloader
         }
 
         // Remove All Games
-        private void Button8_Click(object sender, EventArgs e)
+        private void btnRemoveAll_Click(object sender, EventArgs e)
         {
             // Check For Any Open Clients - Update 1.8.3
             if (Process.GetProcessesByName("Terraria").Length > 0)
@@ -587,7 +587,7 @@ namespace TerrariaDepotDownloader
                     process.Kill();
 
                     // Log Item
-                    if (checkBox1.Checked)
+                    if (cbxLogActions.Checked)
                     {
                         Console.WriteLine("Running game process was found and terminated.");
                     }
@@ -595,7 +595,7 @@ namespace TerrariaDepotDownloader
             }
 
             // Disable If Overwrite Steam Directory Enabled
-            if (checkBox2.Checked)
+            if (cbxOverwriteStreamDir.Checked)
             {
                 MessageBox.Show("You cannot use this feature while \"Overwrite Steam Directory\" feature is enabled.", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
@@ -605,7 +605,7 @@ namespace TerrariaDepotDownloader
             if (MessageBox.Show("Remove All Games?\nYes or No", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
             {
                 // Get Each Row
-                foreach (ListViewItem itemRow in this.versionList.Items)
+                foreach (ListViewItem itemRow in this.lvVersionList.Items)
                 {
                     // Check If Already Downloaded
                     if (itemRow.SubItems[2].Text == "Yes")
@@ -614,7 +614,7 @@ namespace TerrariaDepotDownloader
                         Directory.Delete(Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text, true);
 
                         // Log Item
-                        if (checkBox1.Checked)
+                        if (cbxLogActions.Checked)
                         {
                             Console.WriteLine("Removed: " + Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text);
                         }
@@ -624,7 +624,7 @@ namespace TerrariaDepotDownloader
                 RefreshManifestList();
 
                 // Log Item
-                if (checkBox1.Checked)
+                if (cbxLogActions.Checked)
                 {
                     Console.WriteLine("All apps removed");
                 }
@@ -635,7 +635,7 @@ namespace TerrariaDepotDownloader
         private void listView1_Click(object sender, EventArgs e)
         {
             // Get Each Row
-            foreach (ListViewItem itemRow in this.versionList.Items)
+            foreach (ListViewItem itemRow in this.lvVersionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -644,46 +644,46 @@ namespace TerrariaDepotDownloader
                     if (itemRow.SubItems[2].Text == "Yes")
                     {
                         // Edit Launch Button
-                        button2.Enabled = true;
-                        button2.Text = "Launch";
+                        btnLaunch.Enabled = true;
+                        btnLaunch.Text = "Launch";
 
                         // Edit Remove Button
-                        button5.Enabled = true;
+                        btnRemoveApp.Enabled = true;
                     }
                     else if (itemRow.SubItems[2].Text == "No")
                     {
                         // Edit Launch Button
-                        button2.Enabled = true;
-                        button2.Text = "Download";
+                        btnLaunch.Enabled = true;
+                        btnLaunch.Text = "Download";
 
                         // Edit Remove Button
-                        button5.Enabled = false;
+                        btnRemoveApp.Enabled = false;
                     }
                     else if (itemRow.SubItems[2].Text == "N/A")
                     {
-                        button2.Text = "N/A";
-                        button2.Enabled = false;
+                        btnLaunch.Text = "N/A";
+                        btnLaunch.Enabled = false;
                     }
                 }
             }
         }
 
         // Launch Button
-        private void Button2_Click(object sender, EventArgs e)
+        private void btnLaunch_Click(object sender, EventArgs e)
         {
             // Get Each Row
-            foreach (ListViewItem itemRow in this.versionList.Items)
+            foreach (ListViewItem itemRow in this.lvVersionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
                 {
                     // Check Options
-                    if (button2.Text == "Launch")
+                    if (btnLaunch.Text == "Launch")
                     {
                         // Launch App
                         //
                         // Check If Overwrite Steam Directory Is Enabled
-                        if (checkBox2.Checked)
+                        if (cbxOverwriteStreamDir.Checked)
                         {
                             try
                             {
@@ -691,7 +691,7 @@ namespace TerrariaDepotDownloader
                                 Process.Start("steam://rungameid/105600");
 
                                 // Do logging If Enabled
-                                if (checkBox1.Checked)
+                                if (cbxLogActions.Checked)
                                 {
                                     Console.WriteLine("Successfully launched Terraria v" + File.ReadLines(Properties.Settings.Default.DepotPath + @"\changelog.txt").First().Split(' ')[1].ToString() + " Through Steam!");
                                 }
@@ -712,7 +712,7 @@ namespace TerrariaDepotDownloader
                                 startPath.Start();
 
                                 // Do Logging If Enabled
-                                if (checkBox1.Checked)
+                                if (cbxLogActions.Checked)
                                 {
                                     Console.WriteLine("Successfully launched Terraria v" + itemRow.SubItems[0].Text);
                                 }
@@ -724,18 +724,18 @@ namespace TerrariaDepotDownloader
                             }
                         }
                         // Disable Button
-                        button2.Enabled = false;
+                        btnLaunch.Enabled = false;
                     }
-                    else if (button2.Text == "Download")
+                    else if (btnLaunch.Text == "Download")
                     {
                         // Check If User & Pass Are Populated
-                        if (textBox2.Text != "" && textBox3.Text != "")
+                        if (txtAccountName.Text != "" && txtPassword.Text != "")
                         {
                             // Check If Already Downloaded
                             if (itemRow.SubItems[2].Text == "No")
                             {
                                 // Disable Button
-                                button2.Enabled = false;
+                                btnLaunch.Enabled = false;
 
                                 // Select Tab Control
                                 // tabControl1.SelectedIndex = 2;
@@ -745,7 +745,7 @@ namespace TerrariaDepotDownloader
                                 String DotNetLocation = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\dotnet\dotnet.exe";
                                 // Update 1.5.0, Check If Everwrite To Steam Directory Is Enabled
                                 String OutDir = Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text;
-                                if (checkBox2.Checked) // Overwrite Steam Directory
+                                if (cbxOverwriteStreamDir.Checked) // Overwrite Steam Directory
                                 {
                                     OutDir = Properties.Settings.Default.DepotPath;
 
@@ -759,7 +759,7 @@ namespace TerrariaDepotDownloader
                                             process.Kill();
 
                                             // Log Item
-                                            if (checkBox1.Checked)
+                                            if (cbxLogActions.Checked)
                                             {
                                                 Console.WriteLine("The Terraria process was killed to continue operations.");
                                             }
@@ -771,8 +771,8 @@ namespace TerrariaDepotDownloader
                                     Directory.CreateDirectory(OutDir); // Update 1.8.2 Fix
                                 }
                                 String ManifestID = itemRow.SubItems[1].Text;
-                                String EscapedPassword = Regex.Replace(textBox3.Text, @"[%|<>&^]", @"^$&"); // Escape Any CMD Special Characters If Any Exist // Update 1.8.5.2 Fix
-                                String Arg = "dotnet " + "\"" + DLLLocation + "\"" + " -app 105600 -depot 105601 -manifest " + ManifestID + " -username " + textBox2.Text + " -password " + EscapedPassword + " -dir " + "\"" + OutDir + "\"";
+                                String EscapedPassword = Regex.Replace(txtPassword.Text, @"[%|<>&^]", @"^$&"); // Escape Any CMD Special Characters If Any Exist // Update 1.8.5.2 Fix
+                                String Arg = "dotnet " + "\"" + DLLLocation + "\"" + " -app 105600 -depot 105601 -manifest " + ManifestID + " -username " + txtAccountName.Text + " -password " + EscapedPassword + " -dir " + "\"" + OutDir + "\"";
 
                                 // Start Download
                                 try
@@ -781,7 +781,7 @@ namespace TerrariaDepotDownloader
                                     ExecuteCmd.ExecuteCommandAsync(Arg);
 
                                     // Log Item
-                                    if (checkBox1.Checked)
+                                    if (cbxLogActions.Checked)
                                     {
                                         Console.WriteLine("Download prompt started for Terraria-v" + itemRow.SubItems[0].Text);
                                     }
@@ -800,7 +800,7 @@ namespace TerrariaDepotDownloader
                         else
                         {
                             // Disable Button
-                            button2.Enabled = false;
+                            btnLaunch.Enabled = false;
 
                             // Display Error
                             Console.WriteLine("ERROR: Please enter steam username / password");
@@ -811,22 +811,22 @@ namespace TerrariaDepotDownloader
         }
 
         // Download App Via ToolStrip
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void miDownloadApp_Click(object sender, EventArgs e)
         {
             // Get Each Row
-            foreach (ListViewItem itemRow in this.versionList.Items)
+            foreach (ListViewItem itemRow in this.lvVersionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
                 {
                     // Check If User & Pass Are Populated
-                    if (textBox2.Text != "" && textBox3.Text != "")
+                    if (txtAccountName.Text != "" && txtPassword.Text != "")
                     {
                         // Check If Already Downloaded
                         if (itemRow.SubItems[2].Text == "No")
                         {
                             // Disable Button
-                            button2.Enabled = false;
+                            btnLaunch.Enabled = false;
 
                             // Select Tab Control
                             // tabControl1.SelectedIndex = 2;
@@ -836,7 +836,7 @@ namespace TerrariaDepotDownloader
                             String DotNetLocation = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\dotnet\dotnet.exe";
                             // Update 1.5.0, Check If Everwrite To Steam Directory Is Enabled
                             String OutDir = Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text;
-                            if (checkBox2.Checked) // Overwrite Steam Directory
+                            if (cbxOverwriteStreamDir.Checked) // Overwrite Steam Directory
                             {
                                 OutDir = Properties.Settings.Default.DepotPath;
 
@@ -850,7 +850,7 @@ namespace TerrariaDepotDownloader
                                         process.Kill();
 
                                         // Log Item
-                                        if (checkBox1.Checked)
+                                        if (cbxLogActions.Checked)
                                         {
                                             Console.WriteLine("The Terraria process was killed to continue operations.");
                                         }
@@ -862,8 +862,8 @@ namespace TerrariaDepotDownloader
                                 Directory.CreateDirectory(OutDir); // Update 1.8.2 Fix
                             }
                             String ManifestID = itemRow.SubItems[1].Text;
-                            String EscapedPassword = Regex.Replace(textBox3.Text, @"[%|<>&^]", @"^$&"); // Escape Any CMD Special Characters If Any Exist // Update 1.8.5.2 Fix
-                            String Arg = "dotnet " + "\"" + DLLLocation + "\"" + " -app 105600 -depot 105601 -manifest " + ManifestID + " -username " + textBox2.Text + " -password " + EscapedPassword + " -dir " + "\"" + OutDir + "\"";
+                            String EscapedPassword = Regex.Replace(txtPassword.Text, @"[%|<>&^]", @"^$&"); // Escape Any CMD Special Characters If Any Exist // Update 1.8.5.2 Fix
+                            String Arg = "dotnet " + "\"" + DLLLocation + "\"" + " -app 105600 -depot 105601 -manifest " + ManifestID + " -username " + txtAccountName.Text + " -password " + EscapedPassword + " -dir " + "\"" + OutDir + "\"";
 
                             // Start Download
                             try
@@ -872,7 +872,7 @@ namespace TerrariaDepotDownloader
                                 ExecuteCmd.ExecuteCommandAsync(Arg);
 
                                 // Log Item
-                                if (checkBox1.Checked)
+                                if (cbxLogActions.Checked)
                                 {
                                     Console.WriteLine("Download prompt started for Terraria-v" + itemRow.SubItems[0].Text);
                                 }
@@ -891,7 +891,7 @@ namespace TerrariaDepotDownloader
                     else
                     {
                         // Disable Button
-                        button2.Enabled = false;
+                        btnLaunch.Enabled = false;
 
                         // Display Error
                         Console.WriteLine("ERROR: Please enter steam username / password");
@@ -901,17 +901,17 @@ namespace TerrariaDepotDownloader
         }
 
         // Remove App
-        private void button5_Click(object sender, EventArgs e)
+        private void btnRemoveApp_Click(object sender, EventArgs e)
         {
             // Disable If Overwrite Steam Directory Enabled
-            if (checkBox2.Checked)
+            if (cbxOverwriteStreamDir.Checked)
             {
                 MessageBox.Show("You cannot use this feature while \"Overwrite Steam Directory\" feature is enabled.", "TerrariaDepotDownloader v" + FileVersionInfo.GetVersionInfo(Path.GetFileName(System.Windows.Forms.Application.ExecutablePath)).FileVersion, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
 
             // Get Each Row
-            foreach (ListViewItem itemRow in this.versionList.Items)
+            foreach (ListViewItem itemRow in this.lvVersionList.Items)
             {
                 // Get Selected Item
                 if (itemRow.Focused)
@@ -929,7 +929,7 @@ namespace TerrariaDepotDownloader
                                 process.Kill();
 
                                 // Log Item
-                                if (checkBox1.Checked)
+                                if (cbxLogActions.Checked)
                                 {
                                     Console.WriteLine("The Terraria process was killed to continue operations.");
                                 }
@@ -940,7 +940,7 @@ namespace TerrariaDepotDownloader
                         Directory.Delete(Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text, true);
 
                         // Log Item
-                        if (checkBox1.Checked)
+                        if (cbxLogActions.Checked)
                         {
                             Console.WriteLine("Removed: " + Properties.Settings.Default.DepotPath + @"\Terraria-v" + itemRow.SubItems[0].Text);
                         }
@@ -952,11 +952,11 @@ namespace TerrariaDepotDownloader
             }
 
             // Edit Button
-            button5.Enabled = false;
+            btnRemoveApp.Enabled = false;
         }
 
         // Open Depot Folder Directory
-        private void button9_Click(object sender, EventArgs e)
+        private void btnOpenDepots_Click(object sender, EventArgs e)
         {
             try
             {
@@ -964,7 +964,7 @@ namespace TerrariaDepotDownloader
                 Process.Start(Properties.Settings.Default.DepotPath);
 
                 // Log Action
-                if (checkBox1.Checked)
+                if (cbxLogActions.Checked)
                 {
                     Console.WriteLine("Opened depot directory");
                 }
@@ -977,41 +977,41 @@ namespace TerrariaDepotDownloader
         }
 
         // Update Checkbox Config
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void cbxLogActions_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (cbxLogActions.Checked)
             {
                 Properties.Settings.Default.LogActions = true;
             }
-            else if (!checkBox1.Checked)
+            else if (!cbxLogActions.Checked)
             {
                 Properties.Settings.Default.LogActions = false;
             }
         }
 
         // Auto Scroll To End
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        private void rtbLog_TextChanged(object sender, EventArgs e)
         {
             // set the current caret position to the end
-            richTextBox1.SelectionStart = richTextBox1.Text.Length;
+            rtbLog.SelectionStart = rtbLog.Text.Length;
 
             // scroll it automatically
-            richTextBox1.ScrollToCaret();
+            rtbLog.ScrollToCaret();
         }
 
         // Show Prompt Warning
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void cbxOverwriteStreamDir_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox2.Checked && Properties.Settings.Default.OverwriteSteam == false)
+            if (cbxOverwriteStreamDir.Checked && Properties.Settings.Default.OverwriteSteam == false)
             {
                 // Show Warning
                 if (MessageBox.Show("This will overwrite your game within steamapps." + "\n" + "Do you want to continue ?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 {
                     // Cancle Prompt
-                    checkBox2.Checked = false;
+                    cbxOverwriteStreamDir.Checked = false;
 
                     // Enable Path Changing
-                    button6.Enabled = true;
+                    btnBrowse.Enabled = true;
 
                     // Update Settings
                     Properties.Settings.Default.OverwriteSteam = false;
@@ -1020,7 +1020,7 @@ namespace TerrariaDepotDownloader
                     // Update Forum
 
                     // Log Item
-                    if (checkBox1.Checked)
+                    if (cbxLogActions.Checked)
                     {
                         Console.WriteLine("Overwrite steam directory mode cancled.");
                     }
@@ -1033,10 +1033,10 @@ namespace TerrariaDepotDownloader
                     {
                         Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Steam\steamapps\common\Terraria");
                     }
-                    textBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Steam\steamapps\common\Terraria";
+                    txtBaseDepotDir.Text = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Steam\steamapps\common\Terraria";
 
                     // Disable Path Changing
-                    button6.Enabled = false;
+                    btnBrowse.Enabled = false;
 
                     // Update Settings
                     Properties.Settings.Default.DepotPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Steam\steamapps\common\Terraria";
@@ -1046,20 +1046,20 @@ namespace TerrariaDepotDownloader
                     // Update Forum
 
                     // Log Item
-                    if (checkBox1.Checked)
+                    if (cbxLogActions.Checked)
                     {
                         Console.WriteLine("Overwrite steam directory mode enabled!");
                     }
                     RefreshManifestList();
                 }
             }
-            if (!checkBox2.Checked && Properties.Settings.Default.OverwriteSteam == true)
+            if (!cbxOverwriteStreamDir.Checked && Properties.Settings.Default.OverwriteSteam == true)
             {
                 // Checkbox Unchecked, Reset Textbox To Defualt Dir
-                textBox1.Text = Path.Combine(Application.StartupPath, "TerrariaDepots");
+                txtBaseDepotDir.Text = Path.Combine(Application.StartupPath, "TerrariaDepots");
 
                 // Enable Path Changing
-                button6.Enabled = true;
+                btnBrowse.Enabled = true;
 
                 // Update Settings
                 Properties.Settings.Default.DepotPath = Path.Combine(Application.StartupPath, "TerrariaDepots");
@@ -1069,7 +1069,7 @@ namespace TerrariaDepotDownloader
                 // Update Forum
 
                 // Log Item
-                if (checkBox1.Checked)
+                if (cbxLogActions.Checked)
                 {
                     Console.WriteLine("Overwrite steam directory mode disabled!");
                 }
@@ -1078,10 +1078,10 @@ namespace TerrariaDepotDownloader
         }
 
         // Tooltip Contols
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        private void cbxShowTooltips_CheckedChanged(object sender, EventArgs e)
         {
             // Enable or Disable Tooltips
-            if (checkBox3.Checked)
+            if (cbxShowTooltips.Checked)
             {
                 // Enable Tooltips
                 Properties.Settings.Default.ToolTips = true;
@@ -1096,10 +1096,10 @@ namespace TerrariaDepotDownloader
         }
 
         // Skip Update Controls
-        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        private void cbxSkipUpdateCheck_CheckedChanged(object sender, EventArgs e)
         {
             // Enable or Disable Tooltips
-            if (checkBox4.Checked)
+            if (cbxSkipUpdateCheck.Checked)
             {
                 // Enable Tooltips
                 Properties.Settings.Default.SkipUpdate = true;

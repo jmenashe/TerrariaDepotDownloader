@@ -31,78 +31,78 @@ namespace TerrariaDepotDownloader
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.versionList = new System.Windows.Forms.ListView();
+            this.lvVersionList = new System.Windows.Forms.ListView();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabDownloader = new System.Windows.Forms.TabPage();
+            this.btnOpenDepots = new System.Windows.Forms.Button();
+            this.btnRemoveAll = new System.Windows.Forms.Button();
+            this.btnReloadList = new System.Windows.Forms.Button();
+            this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.cbxSkipUpdateCheck = new System.Windows.Forms.CheckBox();
+            this.cbxLogActions = new System.Windows.Forms.CheckBox();
+            this.cbxShowTooltips = new System.Windows.Forms.CheckBox();
+            this.cbxOverwriteStreamDir = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button6 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.txtBaseDepotDir = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button7 = new System.Windows.Forms.Button();
+            this.txtAccountName = new System.Windows.Forms.TextBox();
+            this.btnShow = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.tabLog = new System.Windows.Forms.TabPage();
+            this.rtbLog = new System.Windows.Forms.RichTextBox();
+            this.btnClearLog = new System.Windows.Forms.Button();
+            this.menuTop = new System.Windows.Forms.ToolStrip();
+            this.miFile = new System.Windows.Forms.ToolStripDropDownButton();
+            this.miClose = new System.Windows.Forms.ToolStripMenuItem();
+            this.miInfo = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnClose = new System.Windows.Forms.Button();
+            this.btnLaunch = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button5 = new System.Windows.Forms.Button();
+            this.btnRemoveApp = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.miDownloadApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.miRemoveApp = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabDownloader.SuspendLayout();
+            this.tabSettings.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.tabLog.SuspendLayout();
+            this.menuTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // versionList
+            // lvVersionList
             // 
-            this.versionList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lvVersionList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionList.BackColor = System.Drawing.SystemColors.Window;
-            this.versionList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lvVersionList.BackColor = System.Drawing.SystemColors.Window;
+            this.lvVersionList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader2,
             this.columnHeader1,
             this.columnHeader3});
-            this.versionList.FullRowSelect = true;
-            this.versionList.GridLines = true;
-            this.versionList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.versionList.Location = new System.Drawing.Point(0, 0);
-            this.versionList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.versionList.Name = "versionList";
-            this.versionList.Size = new System.Drawing.Size(629, 289);
-            this.versionList.TabIndex = 2;
-            this.versionList.UseCompatibleStateImageBehavior = false;
-            this.versionList.View = System.Windows.Forms.View.Details;
-            this.versionList.Click += new System.EventHandler(this.listView1_Click);
-            this.versionList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
+            this.lvVersionList.FullRowSelect = true;
+            this.lvVersionList.GridLines = true;
+            this.lvVersionList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvVersionList.Location = new System.Drawing.Point(0, 0);
+            this.lvVersionList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.lvVersionList.Name = "lvVersionList";
+            this.lvVersionList.Size = new System.Drawing.Size(629, 289);
+            this.lvVersionList.TabIndex = 2;
+            this.lvVersionList.UseCompatibleStateImageBehavior = false;
+            this.lvVersionList.View = System.Windows.Forms.View.Details;
+            this.lvVersionList.Click += new System.EventHandler(this.listView1_Click);
+            this.lvVersionList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvVersionList_MouseClick);
             // 
             // columnHeader2
             // 
@@ -124,9 +124,9 @@ namespace TerrariaDepotDownloader
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabDownloader);
+            this.tabControl1.Controls.Add(this.tabSettings);
+            this.tabControl1.Controls.Add(this.tabLog);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tabControl1.ItemSize = new System.Drawing.Size(28, 28);
             this.tabControl1.Location = new System.Drawing.Point(14, 166);
@@ -137,77 +137,77 @@ namespace TerrariaDepotDownloader
             this.tabControl1.Size = new System.Drawing.Size(642, 378);
             this.tabControl1.TabIndex = 1;
             // 
-            // tabPage1
+            // tabDownloader
             // 
-            this.tabPage1.Controls.Add(this.button9);
-            this.tabPage1.Controls.Add(this.button8);
-            this.tabPage1.Controls.Add(this.button3);
-            this.tabPage1.Controls.Add(this.versionList);
-            this.tabPage1.Location = new System.Drawing.Point(4, 32);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage1.Size = new System.Drawing.Size(634, 342);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Downloader";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabDownloader.Controls.Add(this.btnOpenDepots);
+            this.tabDownloader.Controls.Add(this.btnRemoveAll);
+            this.tabDownloader.Controls.Add(this.btnReloadList);
+            this.tabDownloader.Controls.Add(this.lvVersionList);
+            this.tabDownloader.Location = new System.Drawing.Point(4, 32);
+            this.tabDownloader.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tabDownloader.Name = "tabDownloader";
+            this.tabDownloader.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tabDownloader.Size = new System.Drawing.Size(634, 342);
+            this.tabDownloader.TabIndex = 0;
+            this.tabDownloader.Text = "Downloader";
+            this.tabDownloader.UseVisualStyleBackColor = true;
             // 
-            // button9
+            // btnOpenDepots
             // 
-            this.button9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button9.Location = new System.Drawing.Point(513, 297);
-            this.button9.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(119, 33);
-            this.button9.TabIndex = 4;
-            this.button9.Text = "Open Depots";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.btnOpenDepots.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOpenDepots.Location = new System.Drawing.Point(513, 297);
+            this.btnOpenDepots.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnOpenDepots.Name = "btnOpenDepots";
+            this.btnOpenDepots.Size = new System.Drawing.Size(119, 33);
+            this.btnOpenDepots.TabIndex = 4;
+            this.btnOpenDepots.Text = "Open Depots";
+            this.btnOpenDepots.UseVisualStyleBackColor = true;
+            this.btnOpenDepots.Click += new System.EventHandler(this.btnOpenDepots_Click);
             // 
-            // button8
+            // btnRemoveAll
             // 
-            this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button8.Location = new System.Drawing.Point(110, 297);
-            this.button8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(119, 33);
-            this.button8.TabIndex = 6;
-            this.button8.Text = "Remove All";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.Button8_Click);
+            this.btnRemoveAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRemoveAll.Location = new System.Drawing.Point(110, 297);
+            this.btnRemoveAll.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnRemoveAll.Name = "btnRemoveAll";
+            this.btnRemoveAll.Size = new System.Drawing.Size(119, 33);
+            this.btnRemoveAll.TabIndex = 6;
+            this.btnRemoveAll.Text = "Remove All";
+            this.btnRemoveAll.UseVisualStyleBackColor = true;
+            this.btnRemoveAll.Click += new System.EventHandler(this.btnRemoveAll_Click);
             // 
-            // button3
+            // btnReloadList
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(0, 297);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(103, 33);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Reload List";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.btnReloadList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnReloadList.Location = new System.Drawing.Point(0, 297);
+            this.btnReloadList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnReloadList.Name = "btnReloadList";
+            this.btnReloadList.Size = new System.Drawing.Size(103, 33);
+            this.btnReloadList.TabIndex = 3;
+            this.btnReloadList.Text = "Reload List";
+            this.btnReloadList.UseVisualStyleBackColor = true;
+            this.btnReloadList.Click += new System.EventHandler(this.btnReloadList_Click);
             // 
-            // tabPage2
+            // tabSettings
             // 
-            this.tabPage2.Controls.Add(this.groupBox3);
-            this.tabPage2.Controls.Add(this.groupBox2);
-            this.tabPage2.Controls.Add(this.groupBox1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 32);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage2.Size = new System.Drawing.Size(634, 342);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Settings";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabSettings.Controls.Add(this.groupBox3);
+            this.tabSettings.Controls.Add(this.groupBox2);
+            this.tabSettings.Controls.Add(this.groupBox1);
+            this.tabSettings.Location = new System.Drawing.Point(4, 32);
+            this.tabSettings.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tabSettings.Name = "tabSettings";
+            this.tabSettings.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tabSettings.Size = new System.Drawing.Size(634, 342);
+            this.tabSettings.TabIndex = 1;
+            this.tabSettings.Text = "Settings";
+            this.tabSettings.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.checkBox4);
-            this.groupBox3.Controls.Add(this.checkBox1);
-            this.groupBox3.Controls.Add(this.checkBox3);
-            this.groupBox3.Controls.Add(this.checkBox2);
+            this.groupBox3.Controls.Add(this.cbxSkipUpdateCheck);
+            this.groupBox3.Controls.Add(this.cbxLogActions);
+            this.groupBox3.Controls.Add(this.cbxShowTooltips);
+            this.groupBox3.Controls.Add(this.cbxOverwriteStreamDir);
             this.groupBox3.Location = new System.Drawing.Point(14, 197);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox3.Name = "groupBox3";
@@ -217,64 +217,64 @@ namespace TerrariaDepotDownloader
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
             // 
-            // checkBox4
+            // cbxSkipUpdateCheck
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(7, 96);
-            this.checkBox4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(142, 20);
-            this.checkBox4.TabIndex = 15;
-            this.checkBox4.Text = "Skip Update Check";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            this.cbxSkipUpdateCheck.AutoSize = true;
+            this.cbxSkipUpdateCheck.Location = new System.Drawing.Point(7, 96);
+            this.cbxSkipUpdateCheck.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cbxSkipUpdateCheck.Name = "cbxSkipUpdateCheck";
+            this.cbxSkipUpdateCheck.Size = new System.Drawing.Size(142, 20);
+            this.cbxSkipUpdateCheck.TabIndex = 15;
+            this.cbxSkipUpdateCheck.Text = "Skip Update Check";
+            this.cbxSkipUpdateCheck.UseVisualStyleBackColor = true;
+            this.cbxSkipUpdateCheck.CheckedChanged += new System.EventHandler(this.cbxSkipUpdateCheck_CheckedChanged);
             // 
-            // checkBox1
+            // cbxLogActions
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(7, 23);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(96, 20);
-            this.checkBox1.TabIndex = 12;
-            this.checkBox1.Text = "Log Actions";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.cbxLogActions.AutoSize = true;
+            this.cbxLogActions.Checked = true;
+            this.cbxLogActions.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxLogActions.Location = new System.Drawing.Point(7, 23);
+            this.cbxLogActions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cbxLogActions.Name = "cbxLogActions";
+            this.cbxLogActions.Size = new System.Drawing.Size(96, 20);
+            this.cbxLogActions.TabIndex = 12;
+            this.cbxLogActions.Text = "Log Actions";
+            this.cbxLogActions.UseVisualStyleBackColor = true;
+            this.cbxLogActions.CheckedChanged += new System.EventHandler(this.cbxLogActions_CheckedChanged);
             // 
-            // checkBox3
+            // cbxShowTooltips
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(7, 47);
-            this.checkBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(111, 20);
-            this.checkBox3.TabIndex = 13;
-            this.checkBox3.Text = "Show Tooltips";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            this.cbxShowTooltips.AutoSize = true;
+            this.cbxShowTooltips.Checked = true;
+            this.cbxShowTooltips.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxShowTooltips.Location = new System.Drawing.Point(7, 47);
+            this.cbxShowTooltips.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cbxShowTooltips.Name = "cbxShowTooltips";
+            this.cbxShowTooltips.Size = new System.Drawing.Size(111, 20);
+            this.cbxShowTooltips.TabIndex = 13;
+            this.cbxShowTooltips.Text = "Show Tooltips";
+            this.cbxShowTooltips.UseVisualStyleBackColor = true;
+            this.cbxShowTooltips.CheckedChanged += new System.EventHandler(this.cbxShowTooltips_CheckedChanged);
             // 
-            // checkBox2
+            // cbxOverwriteStreamDir
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(7, 72);
-            this.checkBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(181, 20);
-            this.checkBox2.TabIndex = 14;
-            this.checkBox2.Text = "Overwrite Steam Directory";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.cbxOverwriteStreamDir.AutoSize = true;
+            this.cbxOverwriteStreamDir.Location = new System.Drawing.Point(7, 72);
+            this.cbxOverwriteStreamDir.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cbxOverwriteStreamDir.Name = "cbxOverwriteStreamDir";
+            this.cbxOverwriteStreamDir.Size = new System.Drawing.Size(181, 20);
+            this.cbxOverwriteStreamDir.TabIndex = 14;
+            this.cbxOverwriteStreamDir.Text = "Overwrite Steam Directory";
+            this.cbxOverwriteStreamDir.UseVisualStyleBackColor = true;
+            this.cbxOverwriteStreamDir.CheckedChanged += new System.EventHandler(this.cbxOverwriteStreamDir_CheckedChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.button6);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.btnBrowse);
+            this.groupBox2.Controls.Add(this.txtBaseDepotDir);
             this.groupBox2.Location = new System.Drawing.Point(14, 17);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox2.Name = "groupBox2";
@@ -284,39 +284,39 @@ namespace TerrariaDepotDownloader
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Base Depot Directory";
             // 
-            // button6
+            // btnBrowse
             // 
-            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button6.Location = new System.Drawing.Point(512, 24);
-            this.button6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(88, 27);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "Browse";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.Location = new System.Drawing.Point(512, 24);
+            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(88, 27);
+            this.btnBrowse.TabIndex = 7;
+            this.btnBrowse.Text = "Browse";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
-            // textBox1
+            // txtBaseDepotDir
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtBaseDepotDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-            this.textBox1.Location = new System.Drawing.Point(10, 24);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(494, 22);
-            this.textBox1.TabIndex = 9;
+            this.txtBaseDepotDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.txtBaseDepotDir.Location = new System.Drawing.Point(10, 24);
+            this.txtBaseDepotDir.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtBaseDepotDir.Name = "txtBaseDepotDir";
+            this.txtBaseDepotDir.ReadOnly = true;
+            this.txtBaseDepotDir.Size = new System.Drawing.Size(494, 22);
+            this.txtBaseDepotDir.TabIndex = 9;
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.button7);
+            this.groupBox1.Controls.Add(this.txtAccountName);
+            this.groupBox1.Controls.Add(this.btnShow);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBox3);
+            this.groupBox1.Controls.Add(this.txtPassword);
             this.groupBox1.Location = new System.Drawing.Point(14, 88);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.groupBox1.Name = "groupBox1";
@@ -336,29 +336,29 @@ namespace TerrariaDepotDownloader
             this.label2.TabIndex = 3;
             this.label2.Text = "Account Name:";
             // 
-            // textBox2
+            // txtAccountName
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtAccountName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox2.Location = new System.Drawing.Point(130, 36);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(375, 22);
-            this.textBox2.TabIndex = 10;
+            this.txtAccountName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtAccountName.Location = new System.Drawing.Point(130, 36);
+            this.txtAccountName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtAccountName.Name = "txtAccountName";
+            this.txtAccountName.Size = new System.Drawing.Size(375, 22);
+            this.txtAccountName.TabIndex = 10;
             // 
-            // button7
+            // btnShow
             // 
-            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button7.Location = new System.Drawing.Point(512, 68);
-            this.button7.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(88, 27);
-            this.button7.TabIndex = 8;
-            this.button7.Text = "Show";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button7_MouseDown);
-            this.button7.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button7_MouseUp);
+            this.btnShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShow.Location = new System.Drawing.Point(512, 68);
+            this.btnShow.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnShow.Name = "btnShow";
+            this.btnShow.Size = new System.Drawing.Size(88, 27);
+            this.btnShow.TabIndex = 8;
+            this.btnShow.Text = "Show";
+            this.btnShow.UseVisualStyleBackColor = true;
+            this.btnShow.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnShow_MouseDown);
+            this.btnShow.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnShow_MouseUp);
             // 
             // label3
             // 
@@ -370,133 +370,133 @@ namespace TerrariaDepotDownloader
             this.label3.TabIndex = 5;
             this.label3.Text = "Password:";
             // 
-            // textBox3
+            // txtPassword
             // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox3.Location = new System.Drawing.Point(130, 68);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.PasswordChar = '*';
-            this.textBox3.Size = new System.Drawing.Size(375, 22);
-            this.textBox3.TabIndex = 11;
+            this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtPassword.Location = new System.Drawing.Point(130, 68);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
+            this.txtPassword.Size = new System.Drawing.Size(375, 22);
+            this.txtPassword.TabIndex = 11;
             // 
-            // tabPage3
+            // tabLog
             // 
-            this.tabPage3.Controls.Add(this.richTextBox1);
-            this.tabPage3.Controls.Add(this.button4);
-            this.tabPage3.Location = new System.Drawing.Point(4, 32);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(634, 342);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Log";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabLog.Controls.Add(this.rtbLog);
+            this.tabLog.Controls.Add(this.btnClearLog);
+            this.tabLog.Location = new System.Drawing.Point(4, 32);
+            this.tabLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tabLog.Name = "tabLog";
+            this.tabLog.Size = new System.Drawing.Size(634, 342);
+            this.tabLog.TabIndex = 2;
+            this.tabLog.Text = "Log";
+            this.tabLog.UseVisualStyleBackColor = true;
             // 
-            // richTextBox1
+            // rtbLog
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.rtbLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.richTextBox1.Size = new System.Drawing.Size(629, 289);
-            this.richTextBox1.TabIndex = 16;
-            this.richTextBox1.Text = "";
-            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            this.rtbLog.Location = new System.Drawing.Point(0, 0);
+            this.rtbLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.rtbLog.Name = "rtbLog";
+            this.rtbLog.ReadOnly = true;
+            this.rtbLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.rtbLog.Size = new System.Drawing.Size(629, 289);
+            this.rtbLog.TabIndex = 16;
+            this.rtbLog.Text = "";
+            this.rtbLog.TextChanged += new System.EventHandler(this.rtbLog_TextChanged);
             // 
-            // button4
+            // btnClearLog
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button4.Location = new System.Drawing.Point(0, 297);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(103, 33);
-            this.button4.TabIndex = 17;
-            this.button4.Text = "Clear Log";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.btnClearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnClearLog.Location = new System.Drawing.Point(0, 297);
+            this.btnClearLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnClearLog.Name = "btnClearLog";
+            this.btnClearLog.Size = new System.Drawing.Size(103, 33);
+            this.btnClearLog.TabIndex = 17;
+            this.btnClearLog.Text = "Clear Log";
+            this.btnClearLog.UseVisualStyleBackColor = true;
+            this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
             // 
-            // toolStrip1
+            // menuTop
             // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripDropDownButton2,
-            this.toolStripDropDownButton1});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(670, 27);
-            this.toolStrip1.TabIndex = 4;
-            this.toolStrip1.Text = "toolStrip1";
+            this.menuTop.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.menuTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miFile,
+            this.miInfo});
+            this.menuTop.Location = new System.Drawing.Point(0, 0);
+            this.menuTop.Name = "menuTop";
+            this.menuTop.Size = new System.Drawing.Size(670, 27);
+            this.menuTop.TabIndex = 4;
+            this.menuTop.Text = "toolStrip1";
             // 
-            // toolStripDropDownButton2
+            // miFile
             // 
-            this.toolStripDropDownButton2.AutoToolTip = false;
-            this.toolStripDropDownButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
-            this.toolStripDropDownButton2.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
-            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.toolStripDropDownButton2.ShowDropDownArrow = false;
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(46, 24);
-            this.toolStripDropDownButton2.Text = "File";
+            this.miFile.AutoToolTip = false;
+            this.miFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.miFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miClose});
+            this.miFile.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.miFile.Image = ((System.Drawing.Image)(resources.GetObject("miFile.Image")));
+            this.miFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.miFile.Name = "miFile";
+            this.miFile.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.miFile.ShowDropDownArrow = false;
+            this.miFile.Size = new System.Drawing.Size(46, 24);
+            this.miFile.Text = "File";
             // 
-            // toolStripMenuItem1
+            // miClose
             // 
-            this.toolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.toolStripMenuItem1.Image = global::TerrariaDepotDownloader.Properties.Resources.CoolDown;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(114, 24);
-            this.toolStripMenuItem1.Text = "Close";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.miClose.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.miClose.Image = global::TerrariaDepotDownloader.Properties.Resources.CoolDown;
+            this.miClose.Name = "miClose";
+            this.miClose.Size = new System.Drawing.Size(114, 24);
+            this.miClose.Text = "Close";
+            this.miClose.Click += new System.EventHandler(this.miClose_Click);
             // 
-            // toolStripDropDownButton1
+            // miInfo
             // 
-            this.toolStripDropDownButton1.AutoToolTip = false;
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.toolStripDropDownButton1.ShowDropDownArrow = false;
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(49, 24);
-            this.toolStripDropDownButton1.Text = "Info";
-            this.toolStripDropDownButton1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripDropDownButton1_MouseUp);
+            this.miInfo.AutoToolTip = false;
+            this.miInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.miInfo.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.miInfo.Image = ((System.Drawing.Image)(resources.GetObject("miInfo.Image")));
+            this.miInfo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.miInfo.Name = "miInfo";
+            this.miInfo.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.miInfo.ShowDropDownArrow = false;
+            this.miInfo.Size = new System.Drawing.Size(49, 24);
+            this.miInfo.Text = "Info";
+            this.miInfo.MouseUp += new System.Windows.Forms.MouseEventHandler(this.miInfo_MouseUp);
             // 
-            // button1
+            // btnClose
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(385, 554);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 61);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Close";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnClose.Location = new System.Drawing.Point(385, 554);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(132, 61);
+            this.btnClose.TabIndex = 5;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // button2
+            // btnLaunch
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Enabled = false;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button2.Location = new System.Drawing.Point(524, 554);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(132, 61);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Launch";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            this.btnLaunch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLaunch.Enabled = false;
+            this.btnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLaunch.Location = new System.Drawing.Point(524, 554);
+            this.btnLaunch.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnLaunch.Name = "btnLaunch";
+            this.btnLaunch.Size = new System.Drawing.Size(132, 61);
+            this.btnLaunch.TabIndex = 0;
+            this.btnLaunch.Text = "Launch";
+            this.btnLaunch.UseVisualStyleBackColor = true;
+            this.btnLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
             // 
             // pictureBox1
             // 
@@ -511,77 +511,76 @@ namespace TerrariaDepotDownloader
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
-            // button5
+            // btnRemoveApp
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button5.Enabled = false;
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button5.Location = new System.Drawing.Point(19, 554);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(132, 61);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "Remove App";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.btnRemoveApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRemoveApp.Enabled = false;
+            this.btnRemoveApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnRemoveApp.Location = new System.Drawing.Point(19, 554);
+            this.btnRemoveApp.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnRemoveApp.Name = "btnRemoveApp";
+            this.btnRemoveApp.Size = new System.Drawing.Size(132, 61);
+            this.btnRemoveApp.TabIndex = 5;
+            this.btnRemoveApp.Text = "Remove App";
+            this.btnRemoveApp.UseVisualStyleBackColor = true;
+            this.btnRemoveApp.Click += new System.EventHandler(this.btnRemoveApp_Click);
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3});
+            this.miDownloadApp,
+            this.miRemoveApp});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(163, 48);
             // 
-            // toolStripMenuItem2
+            // miDownloadApp
             // 
-            this.toolStripMenuItem2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.toolStripMenuItem2.Image = global::TerrariaDepotDownloader.Properties.Resources.Item_149;
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(162, 22);
-            this.toolStripMenuItem2.Text = "Download App";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            this.miDownloadApp.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.miDownloadApp.Image = global::TerrariaDepotDownloader.Properties.Resources.Item_149;
+            this.miDownloadApp.Name = "miDownloadApp";
+            this.miDownloadApp.Size = new System.Drawing.Size(162, 22);
+            this.miDownloadApp.Text = "Download App";
+            this.miDownloadApp.Click += new System.EventHandler(this.miDownloadApp_Click);
             // 
-            // toolStripMenuItem3
+            // miRemoveApp
             // 
-            this.toolStripMenuItem3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.toolStripMenuItem3.Image = global::TerrariaDepotDownloader.Properties.Resources.Trash;
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(162, 22);
-            this.toolStripMenuItem3.Text = "Remove App";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            this.miRemoveApp.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.miRemoveApp.Image = global::TerrariaDepotDownloader.Properties.Resources.Trash;
+            this.miRemoveApp.Name = "miRemoveApp";
+            this.miRemoveApp.Size = new System.Drawing.Size(162, 22);
+            this.miRemoveApp.Text = "Remove App";
+            this.miRemoveApp.Click += new System.EventHandler(this.miRemoveApp_Click);
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(670, 629);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnRemoveApp);
+            this.Controls.Add(this.btnLaunch);
+            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.menuTop);
             this.Controls.Add(this.pictureBox1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(686, 559);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Terraria Depot Downloader";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
+            this.tabDownloader.ResumeLayout(false);
+            this.tabSettings.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.tabLog.ResumeLayout(false);
+            this.menuTop.ResumeLayout(false);
+            this.menuTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -590,44 +589,44 @@ namespace TerrariaDepotDownloader
         }
 
         #endregion
-        private System.Windows.Forms.ListView versionList;
+        private System.Windows.Forms.ListView lvVersionList;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabDownloader;
+        private System.Windows.Forms.TabPage tabSettings;
+        private System.Windows.Forms.TabPage tabLog;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.ToolStrip menuTop;
+        private System.Windows.Forms.ToolStripDropDownButton miInfo;
+        private System.Windows.Forms.ToolStripDropDownButton miFile;
+        private System.Windows.Forms.ToolStripMenuItem miClose;
+        private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnLaunch;
+        private System.Windows.Forms.Button btnReloadList;
+        private System.Windows.Forms.Button btnClearLog;
+        private System.Windows.Forms.RichTextBox rtbLog;
         private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TextBox txtBaseDepotDir;
+        private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtAccountName;
+        private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button btnShow;
+        private System.Windows.Forms.Button btnRemoveAll;
+        private System.Windows.Forms.Button btnRemoveApp;
+        private System.Windows.Forms.Button btnOpenDepots;
+        private System.Windows.Forms.CheckBox cbxLogActions;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox cbxOverwriteStreamDir;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
-        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.ToolStripMenuItem miDownloadApp;
+        private System.Windows.Forms.ToolStripMenuItem miRemoveApp;
+        private System.Windows.Forms.CheckBox cbxShowTooltips;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox cbxSkipUpdateCheck;
     }
 }
 
